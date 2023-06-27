@@ -1,0 +1,88 @@
+@use "../colors.module";
+@use "./faces";
+@use "sass:map";
+@use "sass:string";
+
+$headingSizes: (
+  "1": 5.25rem,
+  "2": 4.5rem,
+  "3": 3.75rem,
+  "4": 3rem,
+  "5": 2.25rem,
+  "6": 1.5rem,
+  "7": 1.125rem,
+);
+
+$headingLineHeight: (
+  "1": 1.15,
+  "2": 1.16,
+  "3": 1.2,
+  "4": 1.25,
+  "5": 1.33,
+  "6": 1.5,
+  "7": 1.33,
+);
+
+$bodySizes: (
+  "xs": 0.5rem,
+  "s": 0.75rem,
+  "m": 1rem,
+  "l": 1.25rem,
+  "xl": 1.5rem,
+);
+
+$bodyLineHeight: (
+  "none": 0,
+  "s": 1.5,
+  "m": 1.5,
+  "l": 1.5,
+  "xl": 1.5,
+);
+
+$fontStyles: (
+  "black": "Black",
+  "blackItalic": "Black-Italic",
+  "bold": "Bold",
+  "boldItalic": "Bold-Italic",
+  "extraBold": "Extra-Bold",
+  "extraBoldItalic": "Extra-Bold-Italic",
+  "light": "Light",
+  "extraLight": "Extra-Light",
+  "lightItalic": "Light-Italic",
+  "extraLightItalic": "Extra-Light-Italic",
+  "italic": "Italic",
+  "medium": "Medium",
+  "mediumItalic": "Medium-Italic",
+  "regular": "Regular",
+  "semiBold": "Semi-Bold",
+  "semiBoldItalic": "Semi-Bold-Italic",
+  "thin": "Thin",
+  "thinItalic": "Thin-Italic",
+);
+
+@mixin headingFont($number, $style: "Bold") {
+  @if map.has-key($headingSizes, $number) {
+    font-size: map.get($headingSizes, $number);
+    line-height: map.get($headingLineHeight, $number);
+
+    @if map.has-key($fontStyles, $style) {
+      font-family: "Mont-#{map.get($fontStyles, $style)}";
+    } @else {
+      font-family: "Mont-Bold";
+    }
+  }
+}
+
+@mixin bodyFont($size, $style: "Medium") {
+  @if map.has-key($bodySizes, $size) {
+    font-size: map.get($bodySizes, $size);
+    line-height: map.get($bodyLineHeight, $size);
+
+    @if map.has-key($fontStyles, $style) {
+      font-family: "Mont-#{map.get($fontStyles, $style)}";
+    } @else {
+      font-family: "Mont-Medium";
+    }
+  }
+  color: colors.$iron;
+} ;

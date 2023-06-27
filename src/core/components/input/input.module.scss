@@ -1,0 +1,90 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "sass:map";
+@use "@responsive" as responsive;
+@use "@fonts" as fonts;
+
+.label {
+  display: block;
+  color: colors.$alabaster;
+}
+
+.form {
+  width: 100%;
+  column-gap: 0;
+}
+
+.inputContainer {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.input {
+  width: 100%;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  padding: map.get(spacing.$vertical-spacing, "s")
+    map.get(spacing.$horizontal-spacing, "xl");
+  background-color: colors.$light-pumice;
+  color: black;
+  caret-color: black;
+}
+
+.iconContainer {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+  background-color: colors.$light-pumice;
+  display: grid;
+  place-items: center;
+  padding-right: map.get(spacing.$horizontal-spacing, "l");
+  color: colors.$alabaster;
+
+  svg {
+    stroke: colors.$bombay;
+    &.sendable {
+      stroke: black;
+      cursor: pointer;
+    }
+  }
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("0px", "min") {
+  .input {
+    @include fonts.bodyFont("s", "regular");
+    color: black;
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+  }
+
+  .iconContainer {
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+    padding-right: map.get(spacing.$horizontal-spacing, "m");
+
+    .icon {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+}
+
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "min") {
+  .input {
+    @include fonts.bodyFont("m", "regular");
+    color: black;
+    padding: map.get(spacing.$vertical-spacing, "s")
+      map.get(spacing.$horizontal-spacing, "m");
+  }
+  .iconContainer {
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+    padding-right: map.get(spacing.$horizontal-spacing, "m");
+
+    .icon {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,86 @@
+@use "./utilities/colors.module";
+@use "./utilities/typography/fonts.module";
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-family: "Mont-Medium";
+  background-color: colors.$tuna-clay;
+  line-height: 1.5;
+  color: colors.$iron;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  color: colors.$alabaster;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  caret-color: colors.$alabaster;
+
+  &::placeholder {
+    color: colors.$storm-gray;
+  }
+}
+:-webkit-autofill {
+  color: #fff !important;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+  @include fonts.bodyFont("m", "medium");
+  color: colors.$background;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1 {
+  @include fonts.headingFont("1", "bold");
+}
+h2 {
+  @include fonts.headingFont("2", "bold");
+}
+h3 {
+  @include fonts.headingFont("3", "bold");
+}
+h4 {
+  @include fonts.headingFont("4", "bold");
+}
+h5 {
+  @include fonts.headingFont("5", "bold");
+}
+h6 {
+  @include fonts.headingFont("6", "bold");
+}
+
+// root div
+#__next {
+  height: 100%;
+  overflow: hidden;
+}

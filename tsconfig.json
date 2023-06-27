@@ -15,7 +15,16 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@core/components/*": ["./src/core/components/*"],
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./src/styles/pages/*"],
+      "@spacing": ["./src/styles/utilities/_spacing.module.scss"],
+      "@colors": ["./src/styles/utilities/_colors.module.scss"],
+      "@fonts": ["./src/styles/utilities/typography/_fonts.module.scss"],
+      "@responsive": [
+        "./src/styles/utilities/responsive/_breakpoints.module.scss"
+      ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

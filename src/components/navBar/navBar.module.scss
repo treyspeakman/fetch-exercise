@@ -1,0 +1,119 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "sass:map";
+@use "@responsive" as responsive;
+@use "@fonts" as fonts;
+
+.navBar {
+  grid-column: 1/-1;
+  background-color: colors.$pill;
+  column-gap: map.get(spacing.$horizontal-spacing, "xl");
+  padding: map.get(spacing.$vertical-spacing, "s")
+    map.get(spacing.$horizontal-spacing, "xl");
+
+  display: grid;
+  grid-template-columns: inherit;
+  align-items: center;
+  justify-items: left;
+}
+
+.iconAndTitle {
+  display: flex;
+  flex-flow: row nowrap;
+  column-gap: map.get(spacing.$horizontal-spacing, "s");
+  grid-column: 1/5;
+}
+
+.version {
+  @include fonts.bodyFont("s", "lightItalic");
+  color: white;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.navbarTitle {
+  color: colors.$alabaster;
+  white-space: nowrap;
+}
+
+.signUp {
+  grid-column: 9/13;
+  width: 100%;
+
+  display: grid;
+  justify-content: right;
+  align-items: center;
+  grid-auto-flow: column;
+  column-gap: map.get(spacing.$horizontal-spacing, "l");
+}
+
+.tripBrainyIcon {
+  border-radius: 999px;
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0.4rem 0.4rem;
+  background-image: linear-gradient(
+    0deg,
+    colors.$mineral-green 0%,
+    colors.$granny-smith 75%
+  );
+  display: grid;
+  place-items: center;
+
+  .svgIcon {
+    color: colors.$alabaster;
+  }
+}
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "max") {
+  .navBar {
+    padding-left: spacing.$default-horizontal-spacing;
+    padding-right: spacing.$default-horizontal-spacing;
+  }
+  .navbarTitle {
+    @include fonts.headingFont("7");
+    align-self: center;
+  }
+
+  .tripBrainyIcon {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .version {
+    @include fonts.bodyFont("xs", "lightItalic");
+    align-self: center;
+  }
+
+  .loginLogout {
+    @include fonts.bodyFont("s", "medium");
+    color: colors.$alabaster;
+  }
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("420px", "max") {
+  .navBar {
+    padding-left: map.get(spacing.$horizontal-spacing, "s");
+    padding-right: map.get(spacing.$horizontal-spacing, "s");
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding-top: map.get(spacing.$vertical-spacing, "xs");
+    padding-bottom: map.get(spacing.$vertical-spacing, "xs");
+  }
+
+  .navbarTitle {
+    @include fonts.bodyFont("m", "bold");
+  }
+
+  .iconAndTitle {
+    column-gap: map.get(spacing.$horizontal-spacing, "xs");
+  }
+
+  .tripBrainyIcon {
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 4px;
+  }
+}

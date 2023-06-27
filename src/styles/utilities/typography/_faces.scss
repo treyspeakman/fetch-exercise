@@ -1,0 +1,90 @@
+$_montserrat-font-path: "../../../../public/fonts/montserrat";
+
+// Montserrat Black.
+@font-face {
+  font-family: "Mont-Black";
+  src: url("#{$_montserrat-font-path}/Montserrat-Black.ttf");
+}
+
+@font-face {
+  font-family: "Mont-Black-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-BlackItalic.ttf");
+}
+
+// Montserrat Bold.
+@font-face {
+  font-family: "Mont-Bold";
+  src: url("#{$_montserrat-font-path}/Montserrat-Bold.ttf");
+}
+@font-face {
+  font-family: "Mont-Bold-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-BoldItalic.ttf");
+}
+@font-face {
+  font-family: "Mont-Extra-Bold";
+  src: url("#{$_montserrat-font-path}/Montserrat-ExtraBold.ttf");
+}
+@font-face {
+  font-family: "Mont-Extra-Bold-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-ExtraBoldItalic.ttf");
+}
+
+// Montserrat Light.
+@font-face {
+  font-family: "Mont-Extra-Light";
+  src: url("#{$_montserrat-font-path}/Montserrat-ExtraLight.ttf");
+}
+@font-face {
+  font-family: "Mont-Extra-Light-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-ExtraLightItalic.ttf");
+}
+@font-face {
+  font-family: "Mont-Light";
+  src: url("#{$_montserrat-font-path}/Montserrat-Light.ttf");
+}
+@font-face {
+  font-family: "Mont-Light-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-LightItalic.ttf");
+}
+
+//Montserrat Italic.
+@font-face {
+  font-family: "Mont-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-Italic.ttf");
+}
+
+// Montserrat Medium.
+@font-face {
+  font-family: "Mont-Medium";
+  src: url("#{$_montserrat-font-path}/Montserrat-Medium.ttf");
+}
+@font-face {
+  font-family: "Mont-Medium-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-MediumItalic.ttf");
+}
+
+// Montserrat Regular.
+@font-face {
+  font-family: "Mont-Regular";
+  src: url("#{$_montserrat-font-path}/Montserrat-Regular.ttf");
+}
+
+// Montserrat Semi-Bold.
+@font-face {
+  font-family: "Mont-Semi-Bold";
+  src: url("#{$_montserrat-font-path}/Montserrat-SemiBold.ttf");
+}
+@font-face {
+  font-family: "Mont-Semi-Bold-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-SemiBoldItalic.ttf");
+}
+
+// Montserrat Thin.
+@font-face {
+  font-family: "Mont-Thin";
+  src: url("#{$_montserrat-font-path}/Montserrat-Thin.ttf");
+}
+@font-face {
+  font-family: "Mont-Thin-Italic";
+  src: url("#{$_montserrat-font-path}/Montserrat-ThinItalic.ttf");
+}

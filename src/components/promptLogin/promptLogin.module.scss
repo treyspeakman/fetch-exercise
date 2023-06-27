@@ -1,0 +1,44 @@
+@use "sass:map";
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+
+.promptLogin {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: inherit;
+  grid-template-rows: 1fr 2fr;
+  grid-column: 1/-1;
+  row-gap: map.get(spacing.$vertical-spacing, "xl");
+}
+
+.prompt {
+  align-self: flex-end;
+  grid-row: 1;
+  grid-column: 4/9;
+  text-align: center;
+  color: colors.$iron;
+}
+
+.form {
+  display: grid;
+  height: min-content;
+  row-gap: spacing.$default-vertical-spacing;
+  grid-row: 2;
+  grid-column: 5/8;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: map.get(spacing.$vertical-spacing, "s")
+    map.get(spacing.$horizontal-spacing, "m");
+  background-color: colors.$light-pumice;
+  color: black;
+  caret-color: black;
+}
+
+.label {
+  display: block;
+  color: colors.$alabaster;
+}

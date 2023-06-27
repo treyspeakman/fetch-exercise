@@ -1,0 +1,23 @@
+@use "sass:map";
+
+$horizontal-spacing: (
+  "xs": 0.25rem,
+  "s": 0.5rem,
+  "m": 1rem,
+  "l": 1.5rem,
+  "xl": 2rem,
+  "xxl": 3rem,
+);
+
+$vertical-spacing: (
+  "xs": 0.5rem,
+  "s": 0.75rem,
+  "m": 1.5rem,
+  "l": 2.25rem,
+  "xl": 3rem,
+  "xxl": 4.5rem,
+);
+
+$default-horizontal-spacing: map.get($horizontal-spacing, "m");
+$default-vertical-spacing: map.get($vertical-spacing, "s");
+$default-box-spacing: $default-vertical-spacing $default-horizontal-spacing;

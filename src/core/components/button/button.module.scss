@@ -1,0 +1,16 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "sass:map";
+
+.button {
+  display: inline-block;
+  width: min-content;
+  height: min-content;
+  background-color: colors.$mineral-green;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  color: colors.$alabaster;
+  padding: map.get(spacing.$vertical-spacing, "xs")
+    map.get(spacing.$horizontal-spacing, "s");
+  box-shadow: colors.$box-shadow;
+}

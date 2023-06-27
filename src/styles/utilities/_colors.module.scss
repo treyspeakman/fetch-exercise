@@ -1,0 +1,47 @@
+// Primary colors; lightest to darkest.
+$tower-gray: #aebcbd; // secondary
+$granny-smith: #879b9d;
+$nevada: #5f7a7d;
+$cutty-sark: #506c6e;
+$mineral-green: #436164;
+$mineral-green-transparent: rgba(67, 97, 100, 0.5);
+$limed-spruce: #2e484b;
+$te-papa-green: #1b393c;
+$firefly: #0e2d30;
+
+// Secondary colors; lightest to darkest.
+$light-pumice: #e0e3e1;
+$pumice: #d5d9d6; // secondary maybe
+$darker-pumice: #c1c6c1;
+$edward: #acb3ad;
+$stack: #858d86;
+$corduroy: #646d65;
+$lunar-green: #434c44;
+$heavy-metal: #1b201b;
+
+// Neutral colors; lightest to darkest.
+$alabaster: #fafafa; // background color
+$widget-background: #f0f0f0;
+$light-background: #efefef;
+$button: #eaeaef;
+$iron: #e4e4e6;
+$french-gray: #c8c9cd;
+$bombay: #adafb5;
+$manatee: #92949c;
+$storm-gray: #6f727c;
+$trout: #545762;
+$tuna: #393c46;
+$tuna-clay: #272a35;
+$ebony-clay: #1e212c;
+$background: #181b24;
+$pill: #2f3340;
+
+$box-shadow: 0px 0px 16px -10px black;
+$same-color-box-shadow: 0 0 3px rgba(0, 0, 0, 0.65);
+$text-shadow: -2px 6px 5px black;
+$element-gradient: linear-gradient(0deg, $tuna-clay 0%, $tuna 100%);
+
+:export {
+  alabaser: $alabaster;
+  mineralGreen: $mineral-green;
+}
