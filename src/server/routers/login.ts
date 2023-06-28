@@ -27,11 +27,9 @@ export const loginRouter = router({
           }
         );
         if (res.status == 200) {
-          console.log("returning true from trpc");
           return true;
         }
       }
-      console.log("returning false from trpc");
       return false;
     }),
 });

@@ -1,14 +1,17 @@
 import Input from "@/core/components/input/Input";
+import login from "@/lib/utils/api/login";
 import { trpcClient } from "@/lib/utils/trpc/client";
 import styles from "./promptLogin.module.scss";
 import Button from "@/core/components/button/Button";
-import { FC, useState } from "react";
+import { FC, SetStateAction, useState } from "react";
 
 interface Props {
-  onLogin: () => {};
+  handleAuthChange: (
+    loginStatus: boolean
+  ) => React.Dispatch<SetStateAction<boolean>>;
 }
 
-const PromptLogin: FC<Props> = ({ onLogin }) => {
+const PromptLogin: FC<Props> = ({ handleAuthChange }) => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
@@ -24,16 +27,18 @@ const PromptLogin: FC<Props> = ({ onLogin }) => {
     setEmail(event.target.value);
   };
 
-  const login = async (
+  const handleLogin = async (
     event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement>
   ) => {
     event.preventDefault();
-    const loggedIn = await trpcClient.login.login.mutate({ name, email });
-    if (loggedIn) {
-      console.log("setting auth to true");
-      onLogin();
-    } else {
-      console.log("not setting authed to true");
+    try {
+      const loggedIn = await login({ name, email });
+      if (loggedIn) {
+        handleAuthChange(true);
+      }
+    } catch (error) {
+      console.error("Failed to login: ", error);
+      handleAuthChange(false);
     }
   };
 
@@ -43,7 +48,7 @@ const PromptLogin: FC<Props> = ({ onLogin }) => {
         Discover your perfect pet companion! Log in now to begin your adoption
         journey!
       </h5>
-      <form className={styles.form} onSubmit={login}>
+      <form className={styles.form} onSubmit={handleLogin}>
         <div>
           <label className={styles.label} htmlFor="name">
             Name

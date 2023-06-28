@@ -1,0 +1,19 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+
+.dogSearch {
+  grid-column: 3/10;
+  height: 100%;
+  width: 100%;
+}
+
+.cardGrid {
+  padding: spacing.$default-box-spacing;
+  grid-column: 3/10;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  column-gap: spacing.$default-horizontal-spacing;
+  row-gap: spacing.$default-vertical-spacing;
+  grid-template-columns: repeat(5, 1fr);
+}

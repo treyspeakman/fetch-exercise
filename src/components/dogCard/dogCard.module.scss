@@ -1,0 +1,61 @@
+@use "sass:map";
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "@fonts" as fonts;
+
+.dogCard {
+  position: relative;
+  display: grid;
+  grid-template-rows: 2fr 1fr;
+  background-color: colors.$iron;
+  height: 200px;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.imageContainer {
+  position: relative;
+  display: grid;
+  width: 100%;
+  background-color: colors.$french-gray;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.75rem;
+    background-color: colors.$iron;
+    border-radius: 50% 50% 0 0;
+  }
+}
+
+.dogDetails {
+  display: grid;
+  grid-template-rows: repeat(3, min-content);
+  justify-items: center;
+  span {
+    @include fonts.bodyFont("s", "medium");
+    color: colors.$limed-spruce;
+
+    &.dogName {
+      @include fonts.bodyFont("m", "semiBold");
+      color: colors.$limed-spruce;
+    }
+  }
+
+  .dogAgeAndBreed {
+    display: flex;
+    column-gap: map.get(spacing.$horizontal-spacing, "s");
+  }
+
+  .detailsDelimiter {
+    width: 0.2rem;
+    height: 0.2rem;
+    border-radius: 999px;
+    background-color: colors.$limed-spruce;
+    align-self: center;
+  }
+}
