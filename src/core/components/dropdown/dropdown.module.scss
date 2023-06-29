@@ -1,5 +1,72 @@
+@use "sass:map";
 @use "@colors" as colors;
 @use "@spacing" as spacing;
+@use "@fonts" as fonts;
 
-.dropdown {
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdownButton {
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: min-content;
+  grid-auto-flow: column;
+  column-gap: map.get(spacing.$horizontal-spacing, "s");
+  padding: spacing.$default-box-spacing;
+  background-color: colors.$pill;
+  @include fonts.bodyFont("m", "medium");
+  color: colors.$alabaster;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: colors.$box-shadow;
+
+  &.opened {
+    visibility: hidden;
+  }
+}
+
+.dropdownBodyContainer {
+  position: absolute;
+  top: 0;
+  &.closed {
+    z-index: -100;
+  }
+}
+
+.dropdownBody {
+  position: relative;
+  width: min-content;
+  max-height: 500px;
+  z-index: 2;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: colors.$pill;
+  border-radius: 0.5rem;
+
+  &.closed {
+    visibility: hidden;
+  }
+
+  box-shadow: colors.$same-color-box-shadow;
+}
+
+.dropdownBodyHeader {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: spacing.$default-box-spacing;
+  background-color: colors.$pill;
+  border-bottom: 3px solid colors.$bombay;
+  z-index: 1;
+  color: colors.$alabaster;
+}
+
+.closeIcon {
+  cursor: pointer;
 }

@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+
+.dropdownItem {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  column-gap: spacing.$default-horizontal-spacing;
+  cursor: pointer;
+  width: 100%;
+  height: min-content;
+  padding: map.get(spacing.$vertical-spacing, "m")
+    map.get(spacing.$horizontal-spacing, "l");
+  color: colors.$alabaster;
+  white-space: nowrap;
+  &:not(:last-child) {
+    border-bottom: 1px solid colors.$bombay;
+  }
+  &:hover {
+    transform: scale(1.05);
+
+    .checkIcon {
+      visibility: visible;
+    }
+  }
+}
+
+.checkIcon {
+  visibility: hidden;
+
+  &.selected {
+    stroke: colors.$cutty-sark;
+    visibility: visible;
+  }
+}

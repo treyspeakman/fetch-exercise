@@ -2,6 +2,10 @@ import Image from "next/image";
 import styles from "./dogCard.module.scss";
 import { FC } from "react";
 import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
+import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
+import { useActor } from "@xstate/react";
+import { useContext, useState } from "react";
+import { Rings } from "react-loading-icons";
 
 const dogAges = {
   1: "Puppy",
@@ -18,15 +22,22 @@ const getDogAge = (age: number): string | undefined => {
 };
 
 const DogCard: FC<Dog> = ({ img, name, age, zip_code, breed }) => {
+  const globalServices = useContext(GlobalStateContext);
+  const [state, send] = useActor(globalServices.dogSearchService);
+
   return (
     <div className={styles.dogCard}>
       <div className={styles.imageContainer}>
-        <Image
-          alt="Dog Picture"
-          src={img}
-          fill
-          style={{ objectFit: "contain" }}
-        />
+        {state.matches("gettingCurrentDogs") ? (
+          <Rings />
+        ) : (
+          <Image
+            alt="Dog Picture"
+            src={img}
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        )}
       </div>
 
       <div className={styles.dogDetails}>

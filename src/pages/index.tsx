@@ -14,7 +14,7 @@ const Home: FC<Props> = ({ authed, handleAuthChange }) => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Dog Finder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/dog.ico" />
       </Head>

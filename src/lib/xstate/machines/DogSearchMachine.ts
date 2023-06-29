@@ -1,6 +1,8 @@
 import getDogPages from "@/lib/utils/api/getDogPages";
 import getDogsFromPage from "@/lib/utils/api/getDogsFromPage";
-import { DoneInvokeEvent, assign, createMachine } from "xstate";
+import { assign, createMachine } from "xstate";
+import { getNextPage, getPreviousPage } from "@/lib/utils/api/getPage";
+import getAllBreeds from "@/lib/utils/api/getAllBreeds";
 
 export interface DogPage {
   resultIds: string[];
@@ -18,21 +20,68 @@ export interface Dog {
 }
 
 /* ------------------------------ Helpers------------------------------ */
-const getFilteredDogPages = async (breedFilters: string[]) => {
-  const filteredDogs = await getDogPages(breedFilters);
+const getFilteredDogPagesService = async (
+  from: number,
+  pageSize: number,
+  breedFilters: string[],
+  sortBy: DogSearchContext["sortBy"],
+  sortDirection: DogSearchContext["sortDirection"]
+) => {
+  const filteredDogs = await getDogPages(
+    from,
+    pageSize,
+    breedFilters,
+    sortBy,
+    sortDirection
+  );
   return filteredDogs;
 };
 
-const getAllDogPages = async () => {
-  const allDogs = await getDogPages();
+const getAllDogPagesService = async (
+  from: number,
+  pageSize: number,
+  breedFilters: string[],
+  sortBy: DogSearchContext["sortBy"],
+  sortDirection: DogSearchContext["sortDirection"]
+) => {
+  const allDogs = await getDogPages(
+    from,
+    pageSize,
+    breedFilters,
+    sortBy,
+    sortDirection
+  );
   return allDogs;
 };
 
-const getCurrentDogs = async (dogPage: DogPage) => {
+const getCurrentDogsService = async (dogPage: DogPage) => {
   const dogs = await getDogsFromPage(dogPage);
   return dogs;
 };
+
+const getAllBreedsService = async () => {
+  const dogs = await getAllBreeds();
+  return dogs;
+};
+
+const getNextPageService = async (dogPage: DogPage, pageSize: number) => {
+  const nextPage = await getNextPage(dogPage, pageSize);
+  return nextPage;
+};
+
+const getPreviousPageService = async (dogPage: DogPage, pageSize: number) => {
+  const previousPage = await getPreviousPage(dogPage, pageSize);
+  return previousPage;
+};
 /* ------------------------------ Event Types ------------------------------ */
+interface NewSortField {
+  type: "NEW_SORT_FIELD";
+  field: DogSearchContext["sortBy"];
+}
+interface ClearFilters {
+  type: "CLEAR_FILTERS";
+}
+
 interface GetFilteredDogPages {
   type: "NEW_BREED_FILTER";
   breed: string;
@@ -42,11 +91,33 @@ interface GetAllDogs {
   type: "GET_ALL_DOG_PAGES";
 }
 
+interface GetAllBreeds {
+  type: "GET_ALL_BREEDS";
+}
+
+interface NextPage {
+  type: "NEXT_PAGE";
+}
+
+interface PreviousPage {
+  type: "PREVIOUS_PAGE";
+}
+
+interface SelectPage {
+  type: "SELECT_PAGE";
+  pageNumber: number;
+}
+
 /* ------------------------------ Schema ------------------------------ */
-interface DogSearchContext {
+export interface DogSearchContext {
   dogPages: DogPage;
   breedFilters: string[];
   currentDogs: Dog[];
+  pageSize: number;
+  cursor: number;
+  breeds: string[];
+  sortBy: "breed" | "age" | "zip_code" | "name";
+  sortDirection: "ASCENDING" | "DESCENDING";
 }
 
 // type TripBrainyEvents = NewUserMessageType | ExtractionCompleteEvent;
@@ -62,16 +133,33 @@ const dogSearchMachine = createMachine(
     schema: {
       /* ------------------------------ Machine Schema ------------------------------ */
       context: {} as DogSearchContext,
-      events: {} as GetFilteredDogPages | GetAllDogs,
+      events: {} as
+        | GetFilteredDogPages
+        | GetAllDogs
+        | NextPage
+        | PreviousPage
+        | SelectPage
+        | GetAllBreeds
+        | ClearFilters
+        | NewSortField,
       services: {} as {
-        getFilteredDogPages: {
+        getFilteredDogPagesService: {
           data: DogPage;
         };
-        getAllDogPages: {
+        getAllDogPagesService: {
           data: DogPage;
         };
-        getCurrentDogs: {
+        getCurrentDogsService: {
           data: Dog[];
+        };
+        getNextPageService: {
+          data: DogPage;
+        };
+        getPreviousPageService: {
+          data: DogPage;
+        };
+        getAllBreedsService: {
+          data: string[];
         };
       },
     },
@@ -79,34 +167,103 @@ const dogSearchMachine = createMachine(
       dogPages: {} as DogPage,
       breedFilters: [],
       currentDogs: [],
+      pageSize: 25,
+      cursor: 0,
+      breeds: [],
+      sortBy: "breed",
+      sortDirection: "ASCENDING",
     },
-    initial: "idle",
+    initial: "init",
     states: {
+      init: {
+        onDone: { target: "gettingCurrentDogs" },
+        type: "parallel",
+        states: {
+          gettingAllDogPages: {
+            initial: "pending",
+            states: {
+              pending: {
+                invoke: {
+                  id: "getAllDogPagesService",
+                  src: "getAllDogPagesService",
+                  onDone: {
+                    actions: "setAllDogPages",
+                    target: "success",
+                  },
+                  onError: {},
+                },
+              },
+              success: {
+                type: "final",
+              },
+              failure: {},
+            },
+          },
+          gettingAllBreeds: {
+            initial: "pending",
+            states: {
+              pending: {
+                invoke: {
+                  id: "getAllBreedsService",
+                  src: "getAllBreedsService",
+                  onDone: {
+                    actions: "setBreeds",
+                    target: "success",
+                  },
+                  onError: {
+                    target: "failure",
+                  },
+                },
+              },
+              success: { type: "final" },
+              failure: {},
+            },
+          },
+        },
+      },
+
       idle: {
         on: {
-          // NEW_BREED_FILTER: {
-          //   actions: "addFilter",
-          //   target: "gettingFilteredDogPages",
-          // },
-          GET_ALL_DOG_PAGES: {
+          NEW_SORT_FIELD: {
+            actions: "setNewSortField",
+            target: "init.gettingAllDogPages",
+          },
+          CLEAR_FILTERS: {
+            actions: "clearFilters",
+            target: "init.gettingAllDogPages",
+          },
+          NEW_BREED_FILTER: {
+            actions: "addFilter",
+            target: "gettingFilteredDogPages",
+          },
+          NEXT_PAGE: {
+            actions: "nextPage",
+            target: "gettingNextPage",
+          },
+          PREVIOUS_PAGE: {
+            actions: "previousPage",
+            target: "gettingPreviousPage",
+          },
+          SELECT_PAGE: {
+            actions: "selectPage",
             target: "gettingAllDogPages",
           },
         },
       },
-      // gettingFilteredDogPages: {
-      //   invoke: {
-      //     id: "filterBreeds",
-      //     src: "filterBreeds",
-      //     onDone: {
-      //       actions: "",
-      //       target: "idle",
-      //     },
-      //   },
-      // },
+      gettingFilteredDogPages: {
+        invoke: {
+          id: "getFilteredDogPagesService",
+          src: "getFilteredDogPagesService",
+          onDone: {
+            actions: "setNewPage",
+            target: "gettingCurrentDogs",
+          },
+        },
+      },
       gettingAllDogPages: {
         invoke: {
-          id: "getAllDogPages",
-          src: "getAllDogPages",
+          id: "getAllDogPagesService",
+          src: "getAllDogPagesService",
           onDone: {
             actions: "setAllDogPages",
             target: "gettingCurrentDogs",
@@ -116,36 +273,118 @@ const dogSearchMachine = createMachine(
       },
       gettingCurrentDogs: {
         invoke: {
-          id: "getCurrentDogs",
-          src: "getCurrentDogs",
+          id: "getCurrentDogsService",
+          src: "getCurrentDogsService",
           onDone: {
             actions: "setCurrentDogs",
             target: "idle",
           },
+          onError: {},
         },
       },
+      gettingNextPage: {
+        invoke: {
+          id: "getNextPageService",
+          src: "getNextPageService",
+          onDone: {
+            actions: "setNewPage",
+            target: "gettingCurrentDogs",
+          },
+          onError: {
+            target: "idle",
+          },
+        },
+      },
+      gettingPreviousPage: {
+        invoke: {
+          id: "getPreviousPageService",
+          src: "getPreviousPageService",
+          onDone: {
+            actions: "setNewPage",
+            target: "gettingCurrentDogs",
+          },
+          onError: {
+            target: "idle",
+          },
+        },
+      },
+      // gettingAllBreeds: {
+      //   invoke: {
+      //     id: "getAllBreedsService",
+      //     src: "getAllBreedsService",
+      //     onDone: {
+      //       actions: "setBreeds",
+      //       target: "idle",
+      //     },
+      //     onError: {
+      //       target: "idle",
+      //     },
+      //   },
+      // },
     },
   },
   {
     /* ------------------------------ Internal Machine Options ------------------------------ */
     actions: {
-      // addFilter: assign({
-      //   breedFilters: (context, event) => [
-      //     ...context.breedFilters,
-      //     event.breed,
-      //   ],
-      // }),
+      setNewSortField: assign({
+        sortBy: (_, event) => event.field,
+      }),
+      clearFilters: assign({
+        breedFilters: () => [],
+      }),
+      addFilter: assign({
+        breedFilters: (context, event) => [
+          ...context.breedFilters,
+          event.breed,
+        ],
+      }),
       setAllDogPages: assign({
         dogPages: (_, event) => event.data,
       }),
       setCurrentDogs: assign({
         currentDogs: (_, event) => event.data,
       }),
+      nextPage: assign({
+        cursor: (context, _) => context.cursor + context.pageSize,
+      }),
+      previousPage: assign({
+        cursor: (context, _) => context.cursor - context.pageSize,
+      }),
+      setNewPage: assign({
+        dogPages: (_, event) => event.data,
+      }),
+      selectPage: assign({
+        cursor: (context, event) => context.pageSize * event.pageNumber - 25,
+      }),
+      setBreeds: assign({
+        breeds: (_, event) => event.data,
+      }),
     },
     guards: {},
     services: {
-      getAllDogPages: async (context) => await getAllDogPages(),
-      getCurrentDogs: async (context) => await getCurrentDogs(context.dogPages),
+      getAllDogPagesService: async (context) =>
+        await getAllDogPagesService(
+          context.cursor,
+          context.pageSize,
+          context.breedFilters,
+          context.sortBy,
+          context.sortDirection
+        ),
+      getCurrentDogsService: async (context) =>
+        await getCurrentDogsService(context.dogPages),
+      getNextPageService: async (context) =>
+        await getNextPageService(context.dogPages, context.pageSize),
+      getPreviousPageService: async (context) =>
+        await getPreviousPageService(context.dogPages, context.pageSize),
+      getAllBreedsService: async () => await getAllBreedsService(),
+      getFilteredDogPagesService: async (context) =>
+        await getFilteredDogPagesService(
+          0,
+          context.pageSize,
+          context.breedFilters,
+          context.sortBy,
+          context.sortDirection
+        ),
     },
   }
 );

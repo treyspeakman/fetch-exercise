@@ -1,0 +1,21 @@
+@use "sass:map";
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+
+.filterHeader {
+  position: relative;
+  display: grid;
+  column-gap: map.get(spacing.$horizontal-spacing, "l");
+  grid-template-columns: min-content 1fr;
+  align-items: center;
+  border-radius: 0.5rem;
+  width: min-content;
+  height: min-content;
+  padding: spacing.$default-box-spacing;
+  // background-color: colors.$tuna-clay;
+}
+
+.dropdownsContainer {
+  display: flex;
+  justify-content: space-around;
+}

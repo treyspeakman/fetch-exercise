@@ -1,5 +1,64 @@
+@use "sass:map";
 @use "@colors" as colors;
 @use "@spacing" as spacing;
 
 .pagination {
+  display: flex;
+  place-items: center;
+  padding: spacing.$default-box-spacing;
+  background-color: colors.$pill;
+  width: min-content;
+  border-radius: 999px;
+  column-gap: map.get(spacing.$horizontal-spacing, "m");
+  box-shadow: colors.$same-color-box-shadow;
+}
+
+.icon {
+  stroke: colors.$trout;
+  &.available {
+    stroke: colors.$alabaster;
+    cursor: pointer;
+  }
+}
+
+.pageNumberList {
+  display: flex;
+  align-items: center;
+  column-gap: map.get(spacing.$horizontal-spacing, "l");
+  padding: 0 map.get(spacing.$horizontal-spacing, "xl");
+}
+
+.pageNumber {
+  color: colors.$alabaster;
+  position: relative;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  &:hover:not(.currentPage) {
+    transform: scale(1.2);
+    transition: transform 0.1s ease;
+  }
+}
+
+.pageNumberContainer {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+
+  &:hover:not(.currentPage) {
+    .pageNumber {
+      color: colors.$granny-smith;
+    }
+  }
+  &.currentPage {
+    border-radius: 999px;
+    width: 2rem;
+    height: 2rem;
+    background-color: colors.$cutty-sark;
+    box-shadow: colors.$box-shadow;
+  }
+}
+
+.ellipses {
+  color: colors.$alabaster;
 }
