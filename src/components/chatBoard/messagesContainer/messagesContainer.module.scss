@@ -1,0 +1,62 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "@responsive" as responsive;
+@use "sass:map";
+
+.messagesContainer {
+  grid-area: messageFeed;
+
+  padding: map.get(spacing.$vertical-spacing, "m")
+    map.get(spacing.$horizontal-spacing, "l");
+  display: flex;
+  flex-flow: column;
+  overflow-x: hidden;
+}
+
+.scrollableChat {
+  max-height: calc(100vh - 19rem);
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-rows: min-content;
+  grid-template-columns: 100%;
+  row-gap: map.get(spacing.$vertical-spacing, "m");
+  scrollbar-color: colors.$manatee transparent;
+  scrollbar-width: 0.25rem;
+
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0.25rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: colors.$manatee;
+    border-radius: 0.5rem;
+  }
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("0px", "min") {
+  .messagesContainer {
+    padding-left: map.get(spacing.$horizontal-spacing, "s");
+    padding-right: map.get(spacing.$horizontal-spacing, "s");
+    padding-bottom: 0;
+    padding-top: map.get(spacing.$vertical-spacing, "s");
+  }
+  .scrollableChat {
+    grid-area: messageFeed;
+    max-height: 100%;
+    align-self: baseline;
+    overflow: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-flow: column;
+    row-gap: map.get(spacing.$vertical-spacing, "xs");
+  }
+}
+
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "min") {
+}

@@ -1,0 +1,29 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+
+.chatPanelContainer {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.chatPanelContainer::before {
+  content: "";
+  position: absolute;
+  top: 50%; /* Position the line in the middle of the container */
+  left: 0; /* Start the line at the far left of the container */
+  width: 50%;
+  height: 1px; /* Set the height of the line */
+  background-color: colors.$mineral-green;
+}
+
+.chatPanelContainer::after {
+  content: "";
+  position: absolute;
+  top: 50%; /* Position the line in the middle of the container */
+  right: 0; /* End the line at the far right of the container */
+  height: 1px; /* Set the height of the line */
+  background-color: colors.$mineral-green;
+}

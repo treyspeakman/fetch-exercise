@@ -4,6 +4,7 @@
 @use "@fonts" as fonts;
 
 .dogCard {
+  cursor: pointer;
   position: relative;
   display: grid;
   grid-template-rows: 2fr 1fr;

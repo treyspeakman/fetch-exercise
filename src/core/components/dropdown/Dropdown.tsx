@@ -25,7 +25,10 @@ const Dropdown: FC<Props> = ({ title, children }) => {
       <div
         className={clsx(styles.dropdownBodyContainer, !opened && styles.closed)}
       >
-        <div className={clsx(styles.dropdownBody, !opened && styles.closed)}>
+        <div
+          onMouseLeave={() => setOpened(false)}
+          className={clsx(styles.dropdownBody, !opened && styles.closed)}
+        >
           <div className={styles.dropdownBodyHeader}>
             {title}
             <CloseIcon

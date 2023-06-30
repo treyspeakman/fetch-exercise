@@ -48,7 +48,7 @@
   border-radius: 0.5rem;
 
   &.closed {
-    visibility: hidden;
+    display: none;
   }
 
   box-shadow: colors.$same-color-box-shadow;

@@ -1,0 +1,189 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "sass:map";
+@use "@responsive" as responsive;
+@use "@fonts" as fonts;
+
+.chatContainer {
+  position: relative;
+  border-radius: 1rem;
+  background-color: colors.$pumice;
+  box-shadow: colors.$box-shadow;
+  overflow: auto;
+  height: 100%;
+
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  grid-auto-flow: row;
+  grid-template-columns: 100%;
+  grid-template-areas:
+    "tripBrainyRow"
+    "messageFeed"
+    "inputRow";
+}
+
+.chatHeader {
+  position: relative;
+  border-top-right-radius: inherit;
+  border-top-left-radius: inherit;
+  display: grid;
+  align-items: center;
+  grid-auto-flow: row;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: spacing.$default-box-spacing;
+  column-gap: map.get(spacing.$horizontal-spacing, "m");
+  grid-area: tripBrainyRow;
+  background-color: colors.$alabaster;
+  justify-content: center;
+}
+
+.threeDots {
+  width: 1rem;
+  height: 0.25rem;
+  padding-left: 0.2rem;
+}
+
+.emojiIcon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+
+  .icon {
+    width: 1.9rem;
+    width: 1.9rem;
+  }
+
+  svg {
+    circle:first-of-type {
+      fill: colors.$granny-smith;
+    }
+  }
+}
+
+.tripBrainyTitle {
+  white-space: nowrap;
+}
+
+.tripBrainyStatus {
+  white-space: nowrap;
+  color: colors.$nevada;
+}
+
+.restartButton {
+  justify-self: end;
+  grid-column: 3;
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("0px", "min") {
+  .chatContainer {
+    overflow: hidden;
+    align-self: baseline;
+    border-radius: 0.5rem;
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  .chatHeader {
+    align-items: center;
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "xs");
+
+    column-gap: map.get(spacing.$horizontal-spacing, "s");
+
+    .tripBrainyInfo {
+      display: grid;
+      row-gap: 0;
+      place-items: center;
+      place-content: center;
+      column-gap: map.get(spacing.$horizontal-spacing, "xs");
+      grid-template-rows: 1fr;
+      grid-template-columns: min-content min-content;
+    }
+
+    .titleAndStatus {
+      display: flex;
+      flex-flow: column nowrap;
+    }
+
+    .tripBrainyTitle {
+      @include fonts.bodyFont("m", "semiBold");
+      color: colors.$ebony-clay;
+      line-height: 1rem;
+    }
+    .tripBrainyStatus {
+      @include fonts.bodyFont("xs", "medium");
+      line-height: 1rem;
+      color: colors.$nevada;
+      white-space: nowrap;
+    }
+
+    .viewResultsButton {
+      margin-left: auto;
+      @include fonts.bodyFont("s", "medium");
+      padding: map.get(spacing.$vertical-spacing, "xxs")
+        map.get(spacing.$horizontal-spacing, "xs");
+    }
+
+    .emojiIcon {
+      height: 20px;
+      width: 18px;
+      .icon {
+        width: 20px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "min") {
+  .chatHeader {
+    padding: map.get(spacing.$vertical-spacing, "s")
+      map.get(spacing.$horizontal-spacing, "s");
+    column-gap: map.get(spacing.$horizontal-spacing, "m");
+    .tripBrainyTitle {
+      @include fonts.bodyFont("l", "semiBold");
+      color: colors.$ebony-clay;
+      line-height: 1rem;
+    }
+    .tripBrainyStatus {
+      @include fonts.bodyFont("s", "regular");
+      line-height: 1rem;
+      color: colors.$nevada;
+      white-space: nowrap;
+    }
+    .emojiIcon {
+      height: 32px;
+      width: 30px;
+      .icon {
+        height: 32px;
+        width: 30px;
+      }
+    }
+  }
+  .chatContainer.hide {
+    display: grid;
+  }
+}
+
+/* ---------------------------------------- Desktop ---------------------------------------- */
+@include responsive.breakpoint("1000px", "min") {
+  .chatHeader {
+    padding: spacing.$default-box-spacing;
+    .tripBrainyStatus {
+      @include fonts.bodyFont("m", "regular");
+      color: colors.$nevada;
+      white-space: nowrap;
+    }
+    .tripBrainyTitle {
+      @include fonts.bodyFont("l", "semiBold");
+      color: colors.$ebony-clay;
+      line-height: 1rem;
+    }
+  }
+}

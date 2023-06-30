@@ -13,6 +13,7 @@ import SearchHeader from "../searchHeader/searchHeader";
 import Dropdown from "@/core/components/dropdown/Dropdown";
 import FilterIcon from "../filterIcon/FilterIcon";
 import Button from "@/core/components/button/Button";
+import MatchCard from "../matchCard/MatchCard";
 
 const sortItems: DogSearchContext["sortBy"][] = ["breed", "age", "name"];
 
@@ -35,9 +36,13 @@ const DogSearch = () => {
           </Dropdown>
         </SearchHeader>
         <Button
-          onClick={() => send({ type: "FIND_A_MATCH" })}
+          onClick={() =>
+            state.context.match.name
+              ? send({ type: "REMOVE_MATCH" })
+              : send({ type: "FIND_A_MATCH" })
+          }
           className={styles.findAMatchButton}
-          text="Find a Match"
+          text={state.context.match.name ? "Back to Search" : "Find a Match"}
         />
         <SearchHeader
           renderIcon={() => (
@@ -74,24 +79,29 @@ const DogSearch = () => {
         </SearchHeader>
       </div>
 
-      {state.context.match ? (
-        <></>
+      {state.context.match.name ? (
+        <MatchCard
+          messageText={state.context.dogIntro}
+          matchedDog={state.context.match}
+        />
       ) : (
-        <div className={styles.cardGrid}>
-          {state?.context.currentDogs.map((dog) => (
-            <DogCard
-              age={dog.age}
-              breed={dog.breed}
-              name={dog.name}
-              zip_code={dog.zip_code}
-              img={dog.img}
-            />
-          ))}
-        </div>
+        <>
+          <div className={styles.cardGrid}>
+            {state?.context.currentDogs.map((dog) => (
+              <DogCard
+                age={dog.age}
+                breed={dog.breed}
+                name={dog.name}
+                zip_code={dog.zip_code}
+                img={dog.img}
+              />
+            ))}
+          </div>
+          <div className={styles.paginationContainer}>
+            <Pagination />
+          </div>
+        </>
       )}
-      <div className={styles.paginationContainer}>
-        <Pagination />
-      </div>
     </div>
   );
 };

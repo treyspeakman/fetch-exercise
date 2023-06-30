@@ -6,34 +6,24 @@ import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import { useContext, useState } from "react";
 import { Rings } from "react-loading-icons";
+import { getDogAge } from "@/lib/utils/helpers/getDogAge";
 
-const dogAges = {
-  1: "Puppy",
-  3: "Young",
-  8: "Adult",
-  100: "Senior",
-};
-
-const getDogAge = (age: number): string | undefined => {
-  const descriptiveAge = Object.entries(dogAges).find(
-    ([key]) => Number(key) > age
-  )?.[1];
-  return descriptiveAge;
-};
-
-const DogCard: FC<Dog> = ({ img, name, age, zip_code, breed }) => {
+const DogCard: FC<Dog> = (dog: Dog) => {
   const globalServices = useContext(GlobalStateContext);
   const [state, send] = useActor(globalServices.dogSearchService);
 
   return (
-    <div className={styles.dogCard}>
+    <div
+      className={styles.dogCard}
+      onClick={() => send({ type: "SET_MATCH_FROM_CARD", dog })}
+    >
       <div className={styles.imageContainer}>
         {state.matches("gettingCurrentDogs") ? (
           <Rings />
         ) : (
           <Image
             alt="Dog Picture"
-            src={img}
+            src={dog.img}
             fill
             style={{ objectFit: "contain" }}
           />
@@ -41,11 +31,11 @@ const DogCard: FC<Dog> = ({ img, name, age, zip_code, breed }) => {
       </div>
 
       <div className={styles.dogDetails}>
-        <span className={styles.dogName}>{name}</span>
+        <span className={styles.dogName}>{dog.name}</span>
         <div className={styles.dogAgeAndBreed}>
-          <span>{getDogAge(age)}</span>
+          <span>{getDogAge(dog.age)}</span>
           <div className={styles.detailsDelimiter}></div>
-          <span>{breed}</span>
+          <span>{dog.breed}</span>
         </div>
       </div>
     </div>

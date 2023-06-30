@@ -1,0 +1,19 @@
+@use "@spacing" as spacing;
+@use "sass:map";
+
+.dogSearchContainer {
+  display: grid;
+  grid-template-columns: inherit;
+  grid-column: 1/-1;
+  width: 100%;
+  height: min-content;
+  display: grid;
+}
+
+.chatContainer {
+  grid-column: 1/4;
+  height: 100%;
+  padding: map.get(spacing.$vertical-spacing, "xxl")
+    map.get(spacing.$horizontal-spacing, "xxl");
+  display: grid;
+}

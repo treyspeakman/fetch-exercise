@@ -4,6 +4,10 @@ import { assign, createMachine } from "xstate";
 import { getNextPage, getPreviousPage } from "@/lib/utils/api/getPage";
 import getAllBreeds from "@/lib/utils/api/getAllBreeds";
 import getMatch from "@/lib/utils/api/getMatch";
+import { trpcClient } from "@/lib/utils/trpc/client";
+import { ChatHistory } from "@/server/routers/chatgpt";
+import { getAgeRange, getDogAge } from "@/lib/utils/helpers/getDogAge";
+import type { DogAgeDescriptions } from "@/lib/utils/helpers/getDogAge";
 
 export interface DogPage {
   resultIds: string[];
@@ -21,6 +25,30 @@ export interface Dog {
 }
 
 /* ------------------------------ Helpers------------------------------ */
+const getMatchFromChatService = async (
+  preferredBreed: string,
+  preferredAge: string
+) => {
+  const dogAgeDescription = getDogAge(parseInt(preferredAge));
+  const dogAgeRange = getAgeRange(dogAgeDescription);
+  const pages = await getDogPages(
+    0,
+    100,
+    "age",
+    "ASCENDING",
+    [preferredBreed],
+    dogAgeRange[0],
+    dogAgeRange[1]
+  );
+  const match = getMatchService(pages.resultIds);
+  return match;
+};
+const getResultsFromChatService = async (chat: ChatHistory) => {
+  return await trpcClient.chatgpt.getMatch.mutate(chat);
+};
+const getDogIntroService = async (match: Dog) => {
+  return await trpcClient.chatgpt.getIntro.mutate(match);
+};
 const getMatchService = async (
   dogIdList: DogSearchContext["searchedDogIdsList"]
 ) => {
@@ -37,9 +65,9 @@ const getFilteredDogPagesService = async (
   const filteredDogs = await getDogPages(
     from,
     pageSize,
-    breedFilters,
     sortBy,
-    sortDirection
+    sortDirection,
+    breedFilters
   );
   return filteredDogs;
 };
@@ -47,16 +75,16 @@ const getFilteredDogPagesService = async (
 const getAllDogPagesService = async (
   from: number,
   pageSize: number,
-  breedFilters: string[],
   sortBy: DogSearchContext["sortBy"],
-  sortDirection: DogSearchContext["sortDirection"]
+  sortDirection: DogSearchContext["sortDirection"],
+  breedFilters: string[]
 ) => {
   const allDogs = await getDogPages(
     from,
     pageSize,
-    breedFilters,
     sortBy,
-    sortDirection
+    sortDirection,
+    breedFilters
   );
   return allDogs;
 };
@@ -81,13 +109,28 @@ const getPreviousPageService = async (dogPage: DogPage, pageSize: number) => {
   return previousPage;
 };
 /* ------------------------------ Event Types ------------------------------ */
+interface FindMatchFromChat {
+  type: "FIND_MATCH_FROM_CHAT";
+  chat: ChatHistory;
+}
+interface SetMatchFromCard {
+  type: "SET_MATCH_FROM_CARD";
+  dog: Dog;
+}
+
+interface RemoveMatch {
+  type: "REMOVE_MATCH";
+}
+
 interface FindAMatch {
   type: "FIND_A_MATCH";
 }
+
 interface NewSortDirection {
   type: "NEW_SORT_DIRECTION";
   direction: DogSearchContext["sortDirection"];
 }
+
 interface NewSortField {
   type: "NEW_SORT_FIELD";
   field: DogSearchContext["sortBy"];
@@ -134,6 +177,9 @@ export interface DogSearchContext {
   sortDirection: "ASCENDING" | "DESCENDING";
   searchedDogIdsList: string[];
   match: Dog;
+  dogIntro: string;
+  preferredBreed: string;
+  preferredAge: string;
 }
 
 // type TripBrainyEvents = NewUserMessageType | ExtractionCompleteEvent;
@@ -159,9 +205,18 @@ const dogSearchMachine = createMachine(
         | ClearFilters
         | NewSortField
         | NewSortDirection
-        | FindAMatch,
+        | FindAMatch
+        | RemoveMatch
+        | SetMatchFromCard
+        | FindMatchFromChat,
 
       services: {} as {
+        getResultsFromChatService: {
+          data: string;
+        };
+        getDogIntroService: {
+          data: string;
+        };
         getMatchService: {
           data: Dog;
         };
@@ -199,6 +254,9 @@ const dogSearchMachine = createMachine(
       sortDirection: "ASCENDING",
       searchedDogIdsList: [],
       match: {} as Dog,
+      dogIntro: "",
+      preferredAge: "",
+      preferredBreed: "",
     },
     initial: "init",
     states: {
@@ -251,6 +309,17 @@ const dogSearchMachine = createMachine(
 
       idle: {
         on: {
+          FIND_MATCH_FROM_CHAT: {
+            target: "gettingResultsFromChat",
+          },
+          SET_MATCH_FROM_CARD: {
+            actions: "setMatchFromCard",
+            target: "getDogIntro",
+          },
+          REMOVE_MATCH: {
+            actions: "removeMatch",
+            target: "idle",
+          },
           FIND_A_MATCH: {
             target: "gettingAllSearchedDogs",
           },
@@ -284,6 +353,26 @@ const dogSearchMachine = createMachine(
           },
         },
       },
+      gettingResultsFromChat: {
+        invoke: {
+          id: "getResultsFromChatService",
+          src: "getResultsFromChatService",
+          onDone: {
+            actions: ["parseResult"],
+            target: "gettingMatchFromChat",
+          },
+        },
+      },
+      gettingMatchFromChat: {
+        invoke: {
+          id: "getMatchFromChatService",
+          src: "getMatchFromChatService",
+          onDone: {
+            actions: "setMatch",
+            target: "getDogIntro",
+          },
+        },
+      },
       gettingAllSearchedDogs: {
         invoke: {
           id: "getAllSearchedDogsService",
@@ -300,7 +389,19 @@ const dogSearchMachine = createMachine(
           src: "getMatchService",
           onDone: {
             actions: "setMatch",
+            target: "getDogIntro",
           },
+        },
+      },
+      getDogIntro: {
+        invoke: {
+          id: "getDogIntroService",
+          src: "getDogIntroService",
+          onDone: {
+            actions: "setDogIntro",
+            target: "idle",
+          },
+          onError: "idle",
         },
       },
       gettingFilteredDogPages: {
@@ -379,6 +480,22 @@ const dogSearchMachine = createMachine(
   {
     /* ------------------------------ Internal Machine Options ------------------------------ */
     actions: {
+      parseResult: assign({
+        preferredBreed: (_, event) => event.data.split("-")[0],
+        preferredAge: (_, event) => event.data.split("-")[1],
+      }),
+      setMatchFromCard: assign({
+        match: (_, event) => event.dog,
+      }),
+      removeMatch: assign({
+        match: () => {
+          return {} as Dog;
+        },
+        dogIntro: () => "",
+      }),
+      setDogIntro: assign({
+        dogIntro: (_, event) => event.data,
+      }),
       setMatch: assign({
         match: (_, event) => event.data,
       }),
@@ -424,23 +541,28 @@ const dogSearchMachine = createMachine(
     },
     guards: {},
     services: {
+      getMatchFromChatService: async (context, _) =>
+        getMatchFromChatService(context.preferredBreed, context.preferredAge),
+      getResultsFromChatService: async (_, event) =>
+        getResultsFromChatService(event.chat),
+      getDogIntroService: async (context) => getDogIntroService(context.match),
       getMatchService: async (context) =>
         getMatchService(context.searchedDogIdsList),
       getAllSearchedDogsService: async (context) =>
         await getAllDogPagesService(
           0,
           context.dogPages.total,
-          context.breedFilters,
           context.sortBy,
-          context.sortDirection
+          context.sortDirection,
+          context.breedFilters
         ),
       getAllDogPagesService: async (context) =>
         await getAllDogPagesService(
           context.cursor,
           context.pageSize,
-          context.breedFilters,
           context.sortBy,
-          context.sortDirection
+          context.sortDirection,
+          context.breedFilters
         ),
       getCurrentDogsService: async (context) =>
         await getCurrentDogsService(context.dogPages),

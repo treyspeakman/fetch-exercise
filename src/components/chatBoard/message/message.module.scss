@@ -1,0 +1,99 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "sass:map";
+@use "@responsive" as responsive;
+@use "@fonts" as fonts;
+
+.messageContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  row-gap: map.get(spacing.$vertical-spacing, "s");
+
+  &.userMessageContainer {
+  }
+}
+
+.recommendationString {
+  color: red;
+}
+
+.message {
+  position: relative;
+  width: fit-content;
+  max-width: 75%;
+  height: min-content;
+  padding: 0.1rem map.get(spacing.$horizontal-spacing, "m");
+  border-radius: 0.75rem;
+
+  p {
+    user-select: text;
+  }
+
+  &.tripBrainyMessage {
+    background-color: colors.$mineral-green;
+    color: colors.$alabaster;
+  }
+
+  &.userMessage {
+    background-color: colors.$widget-background;
+    align-self: end;
+  }
+}
+
+.messageTextContainer {
+  color: inherit;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.message::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0;
+  width: 1.5rem;
+  height: 0.75rem;
+  background-color: colors.$mineral-green;
+  border-bottom-left-radius: 100%;
+  z-index: 0;
+}
+
+.message.userMessage::before {
+  content: "";
+  z-index: 0;
+  left: unset;
+  bottom: 0;
+  right: -0.75rem;
+  transform: scaleX(-1);
+  background-color: colors.$widget-background;
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("0px", "min") {
+  .messageTextContainer {
+    @include fonts.bodyFont("s", "regular");
+  }
+
+  .message {
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+  }
+
+  .message.userMessage {
+    background-color: colors.$widget-background;
+    .messageTextContainer {
+      color: black;
+    }
+  }
+}
+
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "min") {
+  .messageTextContainer {
+    @include fonts.bodyFont("m", "regular");
+  }
+  .message {
+    padding: map.get(spacing.$vertical-spacing, "s")
+      map.get(spacing.$horizontal-spacing, "m");
+  }
+}

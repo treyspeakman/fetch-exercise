@@ -2,7 +2,7 @@
 @use "@spacing" as spacing;
 @use "@fonts" as fonts;
 .dogSearch {
-  grid-column: 3/10;
+  grid-column: 4/10;
   height: 100%;
   width: 100%;
   padding: spacing.$default-box-spacing;
@@ -37,14 +37,14 @@
 .sortIcon {
   overflow: visible;
   cursor: pointer;
-  fill: colors.$alabaster;
+  fill: colors.$trout;
 
   &.ascending path:first-of-type {
-    fill: colors.$nevada;
+    fill: colors.$alabaster;
   }
 
   &.descending path:last-of-type {
-    fill: colors.$nevada;
+    fill: colors.$alabaster;
   }
 }
 

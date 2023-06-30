@@ -1,0 +1,35 @@
+@use "@colors" as colors;
+@use "@spacing" as spacing;
+@use "@responsive" as responsive;
+@use "@fonts" as fonts;
+@use "sass:map";
+
+.inputRow {
+  grid-area: inputRow;
+
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+  height: min-content;
+  padding: spacing.$default-box-spacing;
+  width: 100%;
+  background-color: colors.$alabaster;
+
+  display: grid;
+  place-items: center;
+}
+
+/* ---------------------------------------- Mobile ---------------------------------------- */
+@include responsive.breakpoint("0px", "min") {
+  .inputRow {
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+  }
+}
+
+/* ---------------------------------------- Tablet ---------------------------------------- */
+@include responsive.breakpoint("700px", "min") {
+  .inputRow {
+    padding: map.get(spacing.$vertical-spacing, "s")
+      map.get(spacing.$horizontal-spacing, "m");
+  }
+}

@@ -12,7 +12,7 @@ const getMatch = async (
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(ids),
+    body: JSON.stringify(ids.splice(0, 101)),
   });
 
   if (response.ok) {

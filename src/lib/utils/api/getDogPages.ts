@@ -4,14 +4,18 @@ import { DogSearchContext } from "@/lib/xstate/machines/DogSearchMachine";
 const getDogPages = async (
   from: number,
   pageSize: number,
-  breedFilters: string[] = [],
   sortBy: DogSearchContext["sortBy"],
-  sortDirection: DogSearchContext["sortDirection"]
+  sortDirection: DogSearchContext["sortDirection"],
+  breedFilters: string[] = [],
+  ageMin: number = 0,
+  ageMax: number = 100
 ): Promise<DogPage> => {
   const params = new URLSearchParams({
     from: `${from}`,
     size: `${pageSize}`,
     sort: `${sortBy}:${sortDirection == "ASCENDING" ? "asc" : "desc"}`,
+    ageMin: `${ageMin}`,
+    ageMax: `${ageMax}`,
   });
 
   let url =
