@@ -12,13 +12,9 @@ import Pagination from "@/core/components/pagination/Pagination";
 import SearchHeader from "../searchHeader/searchHeader";
 import Dropdown from "@/core/components/dropdown/Dropdown";
 import FilterIcon from "../filterIcon/FilterIcon";
+import Button from "@/core/components/button/Button";
 
-const sortItems: DogSearchContext["sortBy"][] = [
-  "breed",
-  "age",
-  "zip_code",
-  "name",
-];
+const sortItems: DogSearchContext["sortBy"][] = ["breed", "age", "name"];
 
 const DogSearch = () => {
   const globalServices = useContext(GlobalStateContext);
@@ -38,19 +34,35 @@ const DogSearch = () => {
             ))}
           </Dropdown>
         </SearchHeader>
+        <Button
+          onClick={() => send({ type: "FIND_A_MATCH" })}
+          className={styles.findAMatchButton}
+          text="Find a Match"
+        />
         <SearchHeader
           renderIcon={() => (
             <SortIcon
+              onClick={() =>
+                send({
+                  type: "NEW_SORT_DIRECTION",
+                  direction:
+                    state.context.sortDirection == "ASCENDING"
+                      ? "DESCENDING"
+                      : "ASCENDING",
+                })
+              }
               className={clsx(
                 styles.sortIcon,
-                state.context.sortDirection == "DESCENDING" && styles.descending
+                state.context.sortDirection == "DESCENDING"
+                  ? styles.descending
+                  : styles.ascending
               )}
             />
           )}
         >
           <Dropdown title={state.context.sortBy}>
             {sortItems
-              .filter((field) => field !== state.context.sortBy) // Exclude the current sortBy value
+              .filter((field) => field !== state.context.sortBy)
               .map((field) => (
                 <DropdownItem
                   key={field}
@@ -62,18 +74,21 @@ const DogSearch = () => {
         </SearchHeader>
       </div>
 
-      <div className={styles.filterContainer}></div>
-      <div className={styles.cardGrid}>
-        {state?.context.currentDogs.map((dog) => (
-          <DogCard
-            age={dog.age}
-            breed={dog.breed}
-            name={dog.name}
-            zip_code={dog.zip_code}
-            img={dog.img}
-          />
-        ))}
-      </div>
+      {state.context.match ? (
+        <></>
+      ) : (
+        <div className={styles.cardGrid}>
+          {state?.context.currentDogs.map((dog) => (
+            <DogCard
+              age={dog.age}
+              breed={dog.breed}
+              name={dog.name}
+              zip_code={dog.zip_code}
+              img={dog.img}
+            />
+          ))}
+        </div>
+      )}
       <div className={styles.paginationContainer}>
         <Pagination />
       </div>

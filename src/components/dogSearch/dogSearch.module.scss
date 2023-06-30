@@ -29,21 +29,27 @@
 
 .searchHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  border-bottom: 2px solid colors.$manatee;
 }
 
 .sortIcon {
+  overflow: visible;
   cursor: pointer;
-  path:first-of-type {
+  fill: colors.$alabaster;
+
+  &.ascending path:first-of-type {
     fill: colors.$nevada;
   }
 
-  &.descending {
-    path {
-      fill: colors.$alabaster;
-      &:last-of-type {
-        fill: colors.$nevada;
-      }
-    }
+  &.descending path:last-of-type {
+    fill: colors.$nevada;
   }
+}
+
+.findAMatchButton {
+  @include fonts.bodyFont("l", "medium");
+  color: colors.$alabaster;
+  box-shadow: colors.$box-shadow;
 }

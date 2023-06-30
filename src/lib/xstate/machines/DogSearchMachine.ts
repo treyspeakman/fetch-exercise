@@ -1,8 +1,9 @@
 import getDogPages from "@/lib/utils/api/getDogPages";
-import getDogsFromPage from "@/lib/utils/api/getDogsFromPage";
+import getDogsFromIds from "@/lib/utils/api/getDogsFromIds";
 import { assign, createMachine } from "xstate";
 import { getNextPage, getPreviousPage } from "@/lib/utils/api/getPage";
 import getAllBreeds from "@/lib/utils/api/getAllBreeds";
+import getMatch from "@/lib/utils/api/getMatch";
 
 export interface DogPage {
   resultIds: string[];
@@ -20,6 +21,12 @@ export interface Dog {
 }
 
 /* ------------------------------ Helpers------------------------------ */
+const getMatchService = async (
+  dogIdList: DogSearchContext["searchedDogIdsList"]
+) => {
+  const match = await getMatch(dogIdList);
+  return match;
+};
 const getFilteredDogPagesService = async (
   from: number,
   pageSize: number,
@@ -55,7 +62,7 @@ const getAllDogPagesService = async (
 };
 
 const getCurrentDogsService = async (dogPage: DogPage) => {
-  const dogs = await getDogsFromPage(dogPage);
+  const dogs = await getDogsFromIds(dogPage.resultIds);
   return dogs;
 };
 
@@ -74,6 +81,13 @@ const getPreviousPageService = async (dogPage: DogPage, pageSize: number) => {
   return previousPage;
 };
 /* ------------------------------ Event Types ------------------------------ */
+interface FindAMatch {
+  type: "FIND_A_MATCH";
+}
+interface NewSortDirection {
+  type: "NEW_SORT_DIRECTION";
+  direction: DogSearchContext["sortDirection"];
+}
 interface NewSortField {
   type: "NEW_SORT_FIELD";
   field: DogSearchContext["sortBy"];
@@ -116,8 +130,10 @@ export interface DogSearchContext {
   pageSize: number;
   cursor: number;
   breeds: string[];
-  sortBy: "breed" | "age" | "zip_code" | "name";
+  sortBy: "breed" | "age" | "name";
   sortDirection: "ASCENDING" | "DESCENDING";
+  searchedDogIdsList: string[];
+  match: Dog;
 }
 
 // type TripBrainyEvents = NewUserMessageType | ExtractionCompleteEvent;
@@ -141,8 +157,17 @@ const dogSearchMachine = createMachine(
         | SelectPage
         | GetAllBreeds
         | ClearFilters
-        | NewSortField,
+        | NewSortField
+        | NewSortDirection
+        | FindAMatch,
+
       services: {} as {
+        getMatchService: {
+          data: Dog;
+        };
+        getAllSearchedDogsService: {
+          data: DogPage;
+        };
         getFilteredDogPagesService: {
           data: DogPage;
         };
@@ -172,6 +197,8 @@ const dogSearchMachine = createMachine(
       breeds: [],
       sortBy: "breed",
       sortDirection: "ASCENDING",
+      searchedDogIdsList: [],
+      match: {} as Dog,
     },
     initial: "init",
     states: {
@@ -224,6 +251,13 @@ const dogSearchMachine = createMachine(
 
       idle: {
         on: {
+          FIND_A_MATCH: {
+            target: "gettingAllSearchedDogs",
+          },
+          NEW_SORT_DIRECTION: {
+            actions: "setNewSortDirection",
+            target: "init.gettingAllDogPages",
+          },
           NEW_SORT_FIELD: {
             actions: "setNewSortField",
             target: "init.gettingAllDogPages",
@@ -247,6 +281,25 @@ const dogSearchMachine = createMachine(
           SELECT_PAGE: {
             actions: "selectPage",
             target: "gettingAllDogPages",
+          },
+        },
+      },
+      gettingAllSearchedDogs: {
+        invoke: {
+          id: "getAllSearchedDogsService",
+          src: "getAllSearchedDogsService",
+          onDone: {
+            actions: "setSearchedDogIdsList",
+            target: "findingMatch",
+          },
+        },
+      },
+      findingMatch: {
+        invoke: {
+          id: "getMatchService",
+          src: "getMatchService",
+          onDone: {
+            actions: "setMatch",
           },
         },
       },
@@ -326,6 +379,15 @@ const dogSearchMachine = createMachine(
   {
     /* ------------------------------ Internal Machine Options ------------------------------ */
     actions: {
+      setMatch: assign({
+        match: (_, event) => event.data,
+      }),
+      setSearchedDogIdsList: assign({
+        searchedDogIdsList: (_, event) => event.data.resultIds,
+      }),
+      setNewSortDirection: assign({
+        sortDirection: (_, event) => event.direction,
+      }),
       setNewSortField: assign({
         sortBy: (_, event) => event.field,
       }),
@@ -362,6 +424,16 @@ const dogSearchMachine = createMachine(
     },
     guards: {},
     services: {
+      getMatchService: async (context) =>
+        getMatchService(context.searchedDogIdsList),
+      getAllSearchedDogsService: async (context) =>
+        await getAllDogPagesService(
+          0,
+          context.dogPages.total,
+          context.breedFilters,
+          context.sortBy,
+          context.sortDirection
+        ),
       getAllDogPagesService: async (context) =>
         await getAllDogPagesService(
           context.cursor,
