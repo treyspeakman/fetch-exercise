@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./dogCard.module.scss";
 import { FC } from "react";
-import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
+import { Dog } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import { useContext, useState } from "react";
@@ -37,6 +37,7 @@ const DogCard: FC<Dog> = (dog: Dog) => {
           <div className={styles.detailsDelimiter}></div>
           <span>{dog.breed}</span>
         </div>
+        <span>{dog.zip_code}</span>
       </div>
     </div>
   );

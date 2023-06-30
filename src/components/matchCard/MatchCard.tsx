@@ -1,8 +1,12 @@
 import { FC, useState, useEffect } from "react";
 import Image from "next/image";
-import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
+import { Dog } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
 import styles from "./matchCard.module.scss";
 import { getDogAge } from "@/lib/utils/helpers/getDogAge";
+import { useContext } from "react";
+import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
+import { useActor } from "@xstate/react";
+import { Rings } from "react-loading-icons";
 
 interface Props {
   messageText: string;
@@ -10,6 +14,8 @@ interface Props {
 }
 
 const MatchCard: FC<Props> = ({ messageText, matchedDog }) => {
+  const globalServices = useContext(GlobalStateContext);
+  const [state, send] = useActor(globalServices.dogSearchService);
   const [index, setIndex] = useState<number>(1);
   const [liveMessage, setLiveMessage] = useState<string>("");
 
@@ -43,11 +49,19 @@ const MatchCard: FC<Props> = ({ messageText, matchedDog }) => {
           ></Image>
         </div>
         <div className={styles.detailsContainer}>
-          <span>{matchedDog.name}</span>
-          <span>{getDogAge(matchedDog.age)}</span>
-          <span>{matchedDog.zip_code}</span>
+          <span className={styles.name}>{matchedDog.name}</span>
+          <>
+            <span>{getDogAge(matchedDog.age)}</span>
+            <span>{matchedDog.zip_code}</span>
+          </>
         </div>
-        <div className={styles.dogIntro}>{liveMessage}</div>
+        <div className={styles.dogIntro}>
+          {state.matches("getDogIntro") ? (
+            <Rings className={styles.loadingRings} />
+          ) : (
+            liveMessage
+          )}
+        </div>
       </div>
     )
   );

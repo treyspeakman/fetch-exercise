@@ -5,13 +5,15 @@ import LoadingMapEmoji from "public/icons/loading-map-emoji.svg";
 import WaitingEmoji from "public/icons/waiting-emoji.svg";
 import { ThreeDots } from "react-loading-icons";
 import Button from "@/core/components/button/Button";
+import { ChatHistory } from "@/server/routers/chatgpt";
 
 type Props = {
   status: "WAITING" | "THINKING" | "LOADING_MAP";
+  onRestart: () => void;
   children: React.ReactNode;
 };
 
-const ChatContainer: FC<Props> = ({ status, children }) => {
+const ChatContainer: FC<Props> = ({ status, children, onRestart }) => {
   const getStatusMessage = (status: Props["status"]) => {
     switch (status) {
       case "THINKING":
@@ -24,11 +26,11 @@ const ChatContainer: FC<Props> = ({ status, children }) => {
   return (
     <div className={clsx(styles.chatContainer)}>
       <div className={styles.chatHeader}>
-        <div className={styles.tripBrainyInfo}>
+        <div className={styles.chatInfo}>
           {/* <div className={styles.emojiIcon}>{getEmojiIcon(status)}</div> */}
           <div className={styles.titleAndStatus}>
-            <h6 className={styles.tripBrainyTitle}> Doggo Discoverer </h6>
-            <span className={styles.tripBrainyStatus}>
+            <h6 className={styles.chatTitle}> Doggo Discoverer </h6>
+            <span className={styles.chatStatus}>
               {getStatusMessage(status)}
               <ThreeDots
                 stroke="#000000"
@@ -39,7 +41,11 @@ const ChatContainer: FC<Props> = ({ status, children }) => {
             </span>
           </div>
         </div>
-        <Button className={styles.restartButton} text="Restart"></Button>
+        <Button
+          onClick={() => onRestart()}
+          className={styles.restartButton}
+          text="Restart"
+        ></Button>
       </div>
       {children}
     </div>

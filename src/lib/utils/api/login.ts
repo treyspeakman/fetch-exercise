@@ -17,6 +17,7 @@ const login = async (credentials: Credentials) => {
   );
 
   if (response.ok) {
+    console.log("logged in");
     return true;
   } else {
     console.error("Failed to login: ", response.status);

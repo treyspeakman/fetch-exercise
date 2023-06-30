@@ -58,6 +58,11 @@ export interface Typegen0 {
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
+    "done.invoke.loginService": {
+      type: "done.invoke.loginService";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
     "error.platform.getAllBreedsService": {
       type: "error.platform.getAllBreedsService";
       data: unknown;
@@ -102,6 +107,10 @@ export interface Typegen0 {
       type: "error.platform.getResultsFromChatService";
       data: unknown;
     };
+    "error.platform.loginService": {
+      type: "error.platform.loginService";
+      data: unknown;
+    };
     "xstate.init": { type: "xstate.init" };
   };
   invokeSrcNameMap: {
@@ -116,6 +125,7 @@ export interface Typegen0 {
     getNextPageService: "done.invoke.getNextPageService";
     getPreviousPageService: "done.invoke.getPreviousPageService";
     getResultsFromChatService: "done.invoke.getResultsFromChatService";
+    loginService: "done.invoke.loginService";
   };
   missingImplementations: {
     actions: never;
@@ -129,9 +139,12 @@ export interface Typegen0 {
     nextPage: "NEXT_PAGE";
     parseResult: "done.invoke.getResultsFromChatService";
     previousPage: "PREVIOUS_PAGE";
+    removeBreedFilter: "REMOVE_BREED_FILTER";
     removeMatch: "REMOVE_MATCH";
+    resetAgeFilter: "REMOVE_AGE_FILTER";
     selectPage: "SELECT_PAGE";
     setAllDogPages: "done.invoke.getAllDogPagesService";
+    setAuthStatus: "done.invoke.loginService";
     setBreeds: "done.invoke.getAllBreedsService";
     setCurrentDogs: "done.invoke.getCurrentDogsService";
     setDogIntro: "done.invoke.getDogIntroService";
@@ -139,6 +152,7 @@ export interface Typegen0 {
       | "done.invoke.getMatchFromChatService"
       | "done.invoke.getMatchService";
     setMatchFromCard: "SET_MATCH_FROM_CARD";
+    setNewAgeRange: "NEW_AGE_FILTER";
     setNewPage:
       | "done.invoke.getFilteredDogPagesService"
       | "done.invoke.getNextPageService"
@@ -154,13 +168,16 @@ export interface Typegen0 {
       | "CLEAR_FILTERS"
       | "NEW_SORT_DIRECTION"
       | "NEW_SORT_FIELD"
-      | "xstate.init";
+      | "done.invoke.loginService";
     getAllDogPagesService:
       | "CLEAR_FILTERS"
+      | "NEW_AGE_FILTER"
       | "NEW_SORT_DIRECTION"
       | "NEW_SORT_FIELD"
+      | "REMOVE_AGE_FILTER"
+      | "REMOVE_BREED_FILTER"
       | "SELECT_PAGE"
-      | "xstate.init";
+      | "done.invoke.loginService";
     getAllSearchedDogsService: "FIND_A_MATCH";
     getCurrentDogsService:
       | "done.invoke.getAllDogPagesService"
@@ -178,6 +195,7 @@ export interface Typegen0 {
     getNextPageService: "NEXT_PAGE";
     getPreviousPageService: "PREVIOUS_PAGE";
     getResultsFromChatService: "FIND_MATCH_FROM_CHAT";
+    loginService: "LOGIN";
   };
   matchesStates:
     | "findingMatch"
@@ -200,6 +218,8 @@ export interface Typegen0 {
     | "init.gettingAllDogPages.failure"
     | "init.gettingAllDogPages.pending"
     | "init.gettingAllDogPages.success"
+    | "login"
+    | "promptLogin"
     | {
         init?:
           | "gettingAllBreeds"

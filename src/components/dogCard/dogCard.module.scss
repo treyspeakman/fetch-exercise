@@ -14,6 +14,10 @@
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: colors.$box-shadow;
+
+  &:hover {
+    box-shadow: 0 0 0 4px colors.$mineral-green;
+  }
 }
 
 .imageContainer {

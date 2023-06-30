@@ -5,24 +5,29 @@
 
 .matchCard {
   display: grid;
-  padding: spacing.$default-box-spacing;
+  padding: map.get(spacing.$vertical-spacing, "xxl")
+    map.get(spacing.$horizontal-spacing, "xxl");
   width: 100%;
   height: min-content;
   grid-auto-flow: row;
+  border-radius: 0.5rem;
   row-gap: spacing.$default-vertical-spacing;
+  background-color: colors.$light-background;
 }
 
 .detailsContainer {
   display: flex;
-  justify-content: center;
+  flex-flow: column;
+  align-items: center;
   column-gap: map.get(spacing.$horizontal-spacing, "l");
   & span {
-    color: colors.$alabaster;
+    color: black;
   }
 }
 .dogIntro {
+  display: grid;
   @include fonts.bodyFont("m", "medium");
-  color: colors.$alabaster;
+  color: black;
 }
 
 .imageContainer {
@@ -31,4 +36,21 @@
   position: relative;
   height: 500px;
   width: 100%;
+  box-shadow: colors.$box-shadow;
+  background-color: colors.$button;
+}
+
+.loadingRings {
+  align-self: center;
+  justify-self: center;
+  & * {
+    stroke: colors.$mineral-green;
+  }
+  height: 4rem;
+  width: 4rem;
+}
+
+.name {
+  @include fonts.headingFont("5", "semiBold");
+  color: colors.$ebony-clay;
 }

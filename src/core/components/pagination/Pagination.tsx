@@ -14,7 +14,7 @@ const Pagination = () => {
   const [pageNumbers, setPageNumbers] = useState<number[]>([1, 2, 3, 4, 5]);
   const [currentPage, setCurrentPage] = useState<number>();
   const [finalPage, setFinalPage] = useState<number>(
-    state.context.dogPages.total / state.context.pageSize
+    Math.ceil(state.context.dogPages.total / state.context.pageSize)
   );
 
   const calculateCurrentPage = (
@@ -33,6 +33,11 @@ const Pagination = () => {
     return numArray;
   };
 
+  const hasPreviousPage = () => !!state.context.dogPages.prev;
+  const hasNextPage = () =>
+    state.context.cursor + state.context.pageSize <
+      state.context.dogPages.total && styles.available;
+
   useEffect(() => {
     const currentPage = calculateCurrentPage(
       state.context.pageSize,
@@ -43,25 +48,29 @@ const Pagination = () => {
     if (currentPage > 3) {
       setPageNumbers(createNumberArray(currentPage));
     } else {
-      setPageNumbers([1, 2, 3, 4, 5]);
+      setPageNumbers([1, 2, 3, 4, 5].filter((value) => value <= finalPage));
     }
-  }, [state.context.cursor]);
+  });
 
   useEffect(() => {
-    setFinalPage(state.context.dogPages.total / state.context.pageSize);
+    setFinalPage(
+      Math.ceil(state.context.dogPages.total / state.context.pageSize)
+    );
   }, [state.context.dogPages.total]);
 
   return (
     <div className={styles.pagination}>
       <FirstIcon
-        onClick={() => send({ type: "SELECT_PAGE", pageNumber: 1 })}
+        onClick={() =>
+          hasPreviousPage() && send({ type: "SELECT_PAGE", pageNumber: 1 })
+        }
         className={clsx(
           styles.icon,
           state.context.dogPages.prev && styles.available
         )}
       />
       <PreviousIcon
-        onClick={() => send({ type: "PREVIOUS_PAGE" })}
+        onClick={() => hasPreviousPage() && send({ type: "PREVIOUS_PAGE" })}
         className={clsx(
           styles.icon,
           state.context.dogPages.prev && styles.available
@@ -88,7 +97,7 @@ const Pagination = () => {
         ))}
       </div>
       <NextIcon
-        onClick={() => send({ type: "NEXT_PAGE" })}
+        onClick={() => hasNextPage() && send({ type: "NEXT_PAGE" })}
         className={clsx(
           styles.icon,
           state.context.cursor + state.context.pageSize <
@@ -96,7 +105,9 @@ const Pagination = () => {
         )}
       />
       <LastIcon
-        onClick={() => send({ type: "SELECT_PAGE", pageNumber: finalPage })}
+        onClick={() =>
+          hasNextPage() && send({ type: "SELECT_PAGE", pageNumber: finalPage })
+        }
         className={clsx(
           styles.icon,
           state.context.cursor + state.context.pageSize <

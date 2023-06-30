@@ -1,6 +1,6 @@
 import { FC, createContext } from "react";
 import { useInterpret } from "@xstate/react";
-import dogSearchMachine from "../xstate/machines/DogSearchMachine";
+import dogSearchMachine from "../xstate/machines/dogSearchMachine/DogSearchMachine";
 import { InterpreterFrom } from "xstate";
 
 export const GlobalStateContext = createContext({

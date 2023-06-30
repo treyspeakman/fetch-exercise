@@ -1,13 +1,19 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import clsx from "clsx";
 import styles from "./dropdownItem.module.scss";
 import CheckIcon from "public/icons/check.svg";
+
+interface ExclusiveSelection {
+  applied: true;
+  value: any;
+}
 
 interface Props {
   text: string;
   onSelect: any;
   onRemove?: any;
   addCheckMark?: boolean;
+  exclusiveSelection?: ExclusiveSelection;
 }
 
 const DropdownItem: FC<Props> = ({
@@ -15,6 +21,7 @@ const DropdownItem: FC<Props> = ({
   onSelect,
   onRemove,
   addCheckMark = true,
+  exclusiveSelection,
 }) => {
   const [selected, setSelected] = useState<boolean>();
 
@@ -27,6 +34,11 @@ const DropdownItem: FC<Props> = ({
       onRemove();
     }
   };
+
+  useEffect(() => {
+    if (exclusiveSelection?.applied && text != exclusiveSelection.value)
+      setSelected(false);
+  }, [exclusiveSelection]);
   return (
     <div onClick={() => handleSelection()} className={styles.dropdownItem}>
       {text}

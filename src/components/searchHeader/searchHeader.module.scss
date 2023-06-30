@@ -17,5 +17,6 @@
 
 .dropdownsContainer {
   display: flex;
+  column-gap: map.get(spacing.$horizontal-spacing, "s");
   justify-content: space-around;
 }

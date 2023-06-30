@@ -1,19 +1,16 @@
-import Input from "@/core/components/input/Input";
 import login from "@/lib/utils/api/login";
-import { trpcClient } from "@/lib/utils/trpc/client";
 import styles from "./promptLogin.module.scss";
 import Button from "@/core/components/button/Button";
-import { FC, SetStateAction, useState } from "react";
+import { FC, FormEvent, SetStateAction, useState } from "react";
+import { useContext } from "react";
+import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
+import { useActor } from "@xstate/react";
 
-interface Props {
-  handleAuthChange: (
-    loginStatus: boolean
-  ) => React.Dispatch<SetStateAction<boolean>>;
-}
-
-const PromptLogin: FC<Props> = ({ handleAuthChange }) => {
+const PromptLogin = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const globalServices = useContext(GlobalStateContext);
+  const [state, send] = useActor(globalServices.dogSearchService);
 
   const handleNameInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -27,19 +24,10 @@ const PromptLogin: FC<Props> = ({ handleAuthChange }) => {
     setEmail(event.target.value);
   };
 
-  const handleLogin = async (
-    event: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement>
-  ) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const loggedIn = await login({ name, email });
-      if (loggedIn) {
-        handleAuthChange(true);
-      }
-    } catch (error) {
-      console.error("Failed to login: ", error);
-      handleAuthChange(false);
-    }
+    console.log("submitting credentials");
+    send({ type: "LOGIN", credentials: { name, email } });
   };
 
   return (
@@ -48,7 +36,7 @@ const PromptLogin: FC<Props> = ({ handleAuthChange }) => {
         Discover your perfect pet companion! Log in now to begin your adoption
         journey!
       </h5>
-      <form className={styles.form} onSubmit={handleLogin}>
+      <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
         <div>
           <label className={styles.label} htmlFor="name">
             Name

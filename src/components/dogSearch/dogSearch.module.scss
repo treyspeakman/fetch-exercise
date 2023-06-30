@@ -1,4 +1,5 @@
 @use "@colors" as colors;
+@use "@responsive" as responsive;
 @use "@spacing" as spacing;
 @use "@fonts" as fonts;
 .dogSearch {
@@ -7,12 +8,19 @@
   width: 100%;
   padding: spacing.$default-box-spacing;
 }
+.rings {
+  align-self: center;
+  justify-self: center;
+  height: 10rem;
+  width: 10rem;
+}
 
 .cardGrid {
   padding: spacing.$default-box-spacing;
   grid-column: 3/10;
   width: 100%;
-  height: 100%;
+  height: min-content;
+  align-content: flex-start;
   display: grid;
   column-gap: spacing.$default-horizontal-spacing;
   row-gap: spacing.$default-vertical-spacing;
@@ -37,7 +45,7 @@
 .sortIcon {
   overflow: visible;
   cursor: pointer;
-  fill: colors.$trout;
+  fill: colors.$storm-gray;
 
   &.ascending path:first-of-type {
     fill: colors.$alabaster;
@@ -52,4 +60,10 @@
   @include fonts.bodyFont("l", "medium");
   color: colors.$alabaster;
   box-shadow: colors.$box-shadow;
+}
+
+@include responsive.breakpoint("1800px", "min") {
+  .cardGrid {
+    grid-column: 4/11;
+  }
 }

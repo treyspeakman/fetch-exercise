@@ -47,7 +47,7 @@
   column-gap: map.get(spacing.$horizontal-spacing, "l");
 }
 
-.tripBrainyIcon {
+.dogFinderIcon {
   border-radius: 999px;
   height: 2.5rem;
   width: 2.5rem;
@@ -75,7 +75,7 @@
     align-self: center;
   }
 
-  .tripBrainyIcon {
+  .dogFinderIcon {
     height: 2rem;
     width: 2rem;
   }
@@ -111,7 +111,7 @@
     column-gap: map.get(spacing.$horizontal-spacing, "xs");
   }
 
-  .tripBrainyIcon {
+  .dogFinderIcon {
     height: 1.5rem;
     width: 1.5rem;
     padding: 4px;

@@ -15,16 +15,10 @@ import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import type { ChatHistory, ChatMessage } from "@/server/routers/chatgpt";
 
-interface Props {
-  authed: boolean;
-  handleAuthChange: (
-    loginStatus: boolean
-  ) => React.Dispatch<SetStateAction<boolean>>;
-}
 import styles from "./home.module.scss";
 import { dogFinderQuestions } from "@/lib/utils/chatgpt/systemMessages";
 
-const Home: FC<Props> = ({ authed, handleAuthChange }) => {
+const Home = () => {
   const globalServices = useContext(GlobalStateContext);
   const [state, send] = useActor(globalServices.dogSearchService);
   const [messageQueue, setMessagesQueue] =
@@ -32,8 +26,7 @@ const Home: FC<Props> = ({ authed, handleAuthChange }) => {
   const [messages, setMessages] = useState<ChatHistory>([
     {
       role: "assistant",
-      content:
-        "Hi, I'm here to assist you in finding the perfect dog match. I'm going to ask you a couple of questions, then recommend a match for you. To get started, do you have any size preference for the dog (small, medium, large)?",
+      content: `Welcome! I'm here to help you find the perfect dog match. I'll ask you a few questions and then provide a recommendation. Let's begin by discussing your size preference for the dog. Would you prefer a small, medium, or large-sized dog?`,
     },
   ]);
 
@@ -61,10 +54,13 @@ const Home: FC<Props> = ({ authed, handleAuthChange }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/dog.ico" />
       </Head>
-      {authed ? (
+      {state.context.authed ? (
         <div className={styles.dogSearchContainer}>
           <div className={styles.chatContainer}>
-            <ChatContainer status="WAITING">
+            <ChatContainer
+              onRestart={() => setMessages((prev) => [prev[0]])}
+              status="WAITING"
+            >
               <MessagesContainer>
                 {messages.map(
                   (chatMessage: ChatCompletionRequestMessage, i) => (
@@ -90,7 +86,7 @@ const Home: FC<Props> = ({ authed, handleAuthChange }) => {
                       },
                     ])
                   }
-                  placeholder="Send message to Trip Brainy"
+                  placeholder="Send a message"
                 ></Input>
               </InputRow>
             </ChatContainer>
@@ -98,7 +94,7 @@ const Home: FC<Props> = ({ authed, handleAuthChange }) => {
           <DogSearch />
         </div>
       ) : (
-        <PromptLogin handleAuthChange={handleAuthChange} />
+        <PromptLogin />
       )}
     </>
   );

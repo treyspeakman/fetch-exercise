@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { DogSearchContext } from "@/lib/xstate/machines/DogSearchMachine";
+import { getDogAge } from "@/lib/utils/helpers/getDogAge";
+import { DogSearchContext } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { getAgeRange } from "@/lib/utils/helpers/getDogAge";
 import clsx from "clsx";
 import DogCard from "../dogCard/DogCard";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
@@ -14,6 +16,8 @@ import Dropdown from "@/core/components/dropdown/Dropdown";
 import FilterIcon from "../filterIcon/FilterIcon";
 import Button from "@/core/components/button/Button";
 import MatchCard from "../matchCard/MatchCard";
+import { dogAgeList } from "@/lib/utils/helpers/getDogAge";
+import { Rings } from "react-loading-icons";
 
 const sortItems: DogSearchContext["sortBy"][] = ["breed", "age", "name"];
 
@@ -30,7 +34,29 @@ const DogSearch = () => {
               <DropdownItem
                 text={breed}
                 onSelect={() => send({ type: "NEW_BREED_FILTER", breed })}
-                onRemove={() => {}}
+                onRemove={() => send({ type: "REMOVE_BREED_FILTER", breed })}
+              ></DropdownItem>
+            ))}
+          </Dropdown>
+          <Dropdown title="Age">
+            {dogAgeList.map((ageDescription) => (
+              <DropdownItem
+                text={ageDescription}
+                exclusiveSelection={{
+                  applied: true,
+                  value:
+                    state.context.ageMax !== undefined &&
+                    getDogAge(state.context.ageMax),
+                }}
+                onSelect={() =>
+                  send({
+                    type: "NEW_AGE_FILTER",
+                    ageArray: getAgeRange(ageDescription),
+                  })
+                }
+                onRemove={() =>
+                  send({ type: "REMOVE_AGE_FILTER", ageDescription })
+                }
               ></DropdownItem>
             ))}
           </Dropdown>
@@ -79,7 +105,10 @@ const DogSearch = () => {
         </SearchHeader>
       </div>
 
-      {state.context.match.name ? (
+      {state.matches("findingMatch") ||
+      state.matches("gettingAllSearchedDogs") ? (
+        <Rings className={styles.rings} />
+      ) : state.context.match.name ? (
         <MatchCard
           messageText={state.context.dogIntro}
           matchedDog={state.context.match}

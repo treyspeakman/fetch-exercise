@@ -4,13 +4,12 @@ import styles from "./appLayout.module.scss";
 
 type AppLayoutProps = {
   children: ReactNode;
-  authed: boolean;
 };
 
-const AppLayout: FC<AppLayoutProps> = ({ children, authed }) => {
+const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   return (
     <div className={styles.appLayout}>
-      <NavBar authed={authed} />
+      <NavBar />
       <div className={styles.pageContainer}>{children}</div>
     </div>
   );

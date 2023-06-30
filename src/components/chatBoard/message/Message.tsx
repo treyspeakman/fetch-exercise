@@ -44,14 +44,14 @@ const Message: FC<Props> = ({
       className={clsx(
         styles.messageContainer,
         creator == "assistant"
-          ? styles.tripBrainyMessageContainer
+          ? styles.chatMessageContainer
           : styles.userMessageContainer
       )}
     >
       <div
         className={clsx(
           styles.message,
-          creator == "assistant" ? styles.tripBrainyMessage : styles.userMessage
+          creator == "assistant" ? styles.chatMessage : styles.userMessage
         )}
       >
         <p className={styles.messageTextContainer}>

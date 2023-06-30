@@ -1,4 +1,10 @@
 export type DogAgeDescriptions = "Puppy" | "Young" | "Adult" | "Senior";
+export const dogAgeList: DogAgeDescriptions[] = [
+  "Puppy",
+  "Young",
+  "Adult",
+  "Senior",
+];
 const dogAges: { [key: number]: DogAgeDescriptions } = {
   1: "Puppy",
   4: "Young",

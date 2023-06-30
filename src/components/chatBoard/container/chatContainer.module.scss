@@ -10,14 +10,14 @@
   background-color: colors.$pumice;
   box-shadow: colors.$box-shadow;
   overflow: auto;
-  height: 100%;
+  height: 80%;
 
   display: grid;
   grid-template-rows: min-content 1fr min-content;
   grid-auto-flow: row;
   grid-template-columns: 100%;
   grid-template-areas:
-    "tripBrainyRow"
+    "detailsRow"
     "messageFeed"
     "inputRow";
 }
@@ -33,7 +33,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   padding: spacing.$default-box-spacing;
   column-gap: map.get(spacing.$horizontal-spacing, "m");
-  grid-area: tripBrainyRow;
+  grid-area: detailsRow;
   background-color: colors.$alabaster;
   justify-content: center;
 }
@@ -62,11 +62,11 @@
   }
 }
 
-.tripBrainyTitle {
+.chatTitle {
   white-space: nowrap;
 }
 
-.tripBrainyStatus {
+.chatStatus {
   white-space: nowrap;
   color: colors.$nevada;
 }
@@ -95,7 +95,7 @@
 
     column-gap: map.get(spacing.$horizontal-spacing, "s");
 
-    .tripBrainyInfo {
+    .chatInfo {
       display: grid;
       row-gap: 0;
       place-items: center;
@@ -110,12 +110,12 @@
       flex-flow: column nowrap;
     }
 
-    .tripBrainyTitle {
+    .chatTitle {
       @include fonts.bodyFont("m", "semiBold");
       color: colors.$ebony-clay;
       line-height: 1rem;
     }
-    .tripBrainyStatus {
+    .chatStatus {
       @include fonts.bodyFont("xs", "medium");
       line-height: 1rem;
       color: colors.$nevada;
@@ -146,12 +146,12 @@
     padding: map.get(spacing.$vertical-spacing, "s")
       map.get(spacing.$horizontal-spacing, "s");
     column-gap: map.get(spacing.$horizontal-spacing, "m");
-    .tripBrainyTitle {
+    .chatTitle {
       @include fonts.bodyFont("l", "semiBold");
       color: colors.$ebony-clay;
       line-height: 1rem;
     }
-    .tripBrainyStatus {
+    .chatStatus {
       @include fonts.bodyFont("s", "regular");
       line-height: 1rem;
       color: colors.$nevada;
@@ -175,12 +175,12 @@
 @include responsive.breakpoint("1000px", "min") {
   .chatHeader {
     padding: spacing.$default-box-spacing;
-    .tripBrainyStatus {
+    .chatStatus {
       @include fonts.bodyFont("m", "regular");
       color: colors.$nevada;
       white-space: nowrap;
     }
-    .tripBrainyTitle {
+    .chatTitle {
       @include fonts.bodyFont("l", "semiBold");
       color: colors.$ebony-clay;
       line-height: 1rem;

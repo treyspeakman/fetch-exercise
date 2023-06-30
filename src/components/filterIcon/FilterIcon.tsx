@@ -13,7 +13,10 @@ const FilterIcon = () => {
   const [hovered, setHovered] = useState<boolean>(false);
 
   const handleMouseEnter = (clearable: boolean) => {
-    if (state.context.breedFilters.length > 0) {
+    if (
+      state.context.breedFilters.length > 0 ||
+      state.context.ageMin !== undefined
+    ) {
       setHovered(true);
     }
   };
@@ -27,15 +30,18 @@ const FilterIcon = () => {
       onClick={() => hovered && send({ type: "CLEAR_FILTERS" })}
       className={clsx(
         styles.filterIconContainer,
-        state.context.breedFilters.length > 0 && styles.active
+        state.context.breedFilters.length > 0 ||
+          (state.context.ageMin !== undefined && styles.active)
       )}
     >
-      {state.context.breedFilters.length > 0 && (
+      {(state.context.breedFilters.length > 0 ||
+        state.context.ageMin !== undefined) && (
         <div className={styles.filterCounter}>
           {hovered ? (
             <XIcon className={styles.xIcon} />
           ) : (
-            state.context.breedFilters.length
+            state.context.breedFilters.length +
+            (state.context.ageMin !== undefined ? 1 : 0)
           )}
         </div>
       )}

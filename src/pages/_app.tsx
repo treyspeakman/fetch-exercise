@@ -10,19 +10,11 @@ if (typeof window !== "undefined" && process.env.NODE_ENV == "development") {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
   return (
-    <AppLayout authed={isLoggedIn}>
-      <GlobalStateProvider>
-        <Component
-          {...pageProps}
-          authed={isLoggedIn}
-          handleAuthChange={(loginStatus: boolean) =>
-            setIsLoggedIn(loginStatus)
-          }
-        />
-      </GlobalStateProvider>
-    </AppLayout>
+    <GlobalStateProvider>
+      <AppLayout>
+        <Component {...pageProps} />
+      </AppLayout>
+    </GlobalStateProvider>
   );
 }
