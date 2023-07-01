@@ -1,14 +1,17 @@
-import styles from "./promptLogin.module.scss";
+import clsx from "clsx";
 import Button from "@/core/components/button/Button";
 import { useState } from "react";
 import { useContext } from "react";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 
+import styles from "./promptLogin.module.scss";
+
 const PromptLogin = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const globalServices = useContext(GlobalStateContext);
+  const [submitError, setSubmitError] = useState<boolean>(false);
   const [state, send] = useActor(globalServices.dogSearchService);
 
   const handleNameInputChange = (
@@ -25,8 +28,11 @@ const PromptLogin = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("submitting credentials");
-    send({ type: "LOGIN", credentials: { name, email } });
+    if (email && name) {
+      send({ type: "LOGIN", credentials: { name, email } });
+    } else {
+      setSubmitError(true);
+    }
   };
 
   return (
@@ -41,7 +47,7 @@ const PromptLogin = () => {
             Name
           </label>
           <input
-            className={styles.input}
+            className={clsx(styles.input, submitError && !name && styles.error)}
             placeholder="John Doe"
             id="name"
             value={name}
@@ -54,7 +60,10 @@ const PromptLogin = () => {
           </label>
           <input
             type="text"
-            className={styles.input}
+            className={clsx(
+              styles.input,
+              submitError && !email && styles.error
+            )}
             placeholder="johndoe@example.com"
             id="email"
             value={email}

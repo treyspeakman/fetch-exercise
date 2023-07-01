@@ -36,6 +36,10 @@
   background-color: colors.$light-pumice;
   color: black;
   caret-color: black;
+
+  &.error {
+    box-shadow: 0 0 0 2px red;
+  }
 }
 
 .label {
