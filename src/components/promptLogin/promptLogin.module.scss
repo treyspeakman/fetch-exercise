@@ -1,6 +1,8 @@
 @use "sass:map";
+@use "@responsive" as responsive;
 @use "@colors" as colors;
 @use "@spacing" as spacing;
+@use "@fonts" as fonts;
 
 .promptLogin {
   display: grid;
@@ -10,6 +12,7 @@
   grid-template-rows: 1fr 2fr;
   grid-column: 1/-1;
   row-gap: map.get(spacing.$vertical-spacing, "xl");
+  padding: spacing.$default-box-spacing;
 }
 
 .prompt {
@@ -45,4 +48,34 @@
 .label {
   display: block;
   color: colors.$alabaster;
+}
+
+@include responsive.breakpoint("1195px", "max") {
+  .prompt {
+    grid-column: 3/10;
+  }
+  .form {
+    grid-column: 4/9;
+  }
+}
+
+@include responsive.breakpoint("725px", "max") {
+  .promptLogin {
+    padding: map.get(spacing.$vertical-spacing, "xl")
+      map.get(spacing.$horizontal-spacing, "xl");
+  }
+  .prompt {
+    @include fonts.headingFont("6", "bold");
+    grid-column: 1/-1;
+  }
+  .form {
+    grid-column: 2/12;
+  }
+}
+
+@include responsive.breakpoint("420px", "max") {
+  .prompt {
+    @include fonts.headingFont("7", "bold");
+    grid-column: 1/-1;
+  }
 }

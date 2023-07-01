@@ -3,26 +3,33 @@ export interface Credentials {
   email: string;
 }
 
-const login = async (credentials: Credentials) => {
-  const response = await fetch(
-    "https://frontend-take-home-service.fetch.com/auth/login",
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    }
-  );
+export enum LoginError {
+  Unauthorized = "Unauthorized",
+  GeneralError = "GeneralError",
+}
 
-  if (response.ok) {
-    console.log("logged in");
-    return true;
-  } else {
-    console.error("Failed to login: ", response.status);
-    return false;
+export const login = async (credentials: Credentials) => {
+  try {
+    const response = await fetch(
+      "https://frontend-take-home-service.fetch.com/auth/login",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      }
+    );
+
+    if (response.ok) {
+      return true;
+    } else if (response.status === 401) {
+      throw new Error(LoginError.Unauthorized);
+    } else {
+      throw new Error(LoginError.GeneralError);
+    }
+  } catch (error) {
+    throw new Error(LoginError.GeneralError);
   }
 };
-
-export default login;

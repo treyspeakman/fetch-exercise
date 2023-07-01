@@ -22,6 +22,7 @@ const Message: FC<Props> = ({
 }) => {
   const [index, setIndex] = useState<number>(1);
   const [latestMessage, setLatestMessage] = useState<string>("");
+  const messageRef = useRef<HTMLDivElement>(null);
 
   const renderMessageTyping = () => {
     if (messageText && index <= messageText.length)
@@ -39,8 +40,14 @@ const Message: FC<Props> = ({
   useEffect(() => {
     if (ifLatestMessage) renderMessageTyping();
   }, [index]);
+
+  useEffect(() => {
+    if (messageRef.current) messageRef.current.scrollIntoView({ block: "end" });
+  }, [messageRef.current?.scrollHeight]);
+
   return (
     <div
+      ref={messageRef}
       className={clsx(
         styles.messageContainer,
         creator == "assistant"

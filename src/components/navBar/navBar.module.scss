@@ -24,13 +24,6 @@
   grid-column: 1/5;
 }
 
-.version {
-  @include fonts.bodyFont("s", "lightItalic");
-  color: white;
-  white-space: nowrap;
-  align-self: center;
-}
-
 .navbarTitle {
   color: colors.$alabaster;
   white-space: nowrap;
@@ -61,6 +54,8 @@
   place-items: center;
 
   .svgIcon {
+    height: 100%;
+    width: 100%;
     color: colors.$alabaster;
   }
 }
@@ -78,11 +73,6 @@
   .dogFinderIcon {
     height: 2rem;
     width: 2rem;
-  }
-
-  .version {
-    @include fonts.bodyFont("xs", "lightItalic");
-    align-self: center;
   }
 
   .loginLogout {

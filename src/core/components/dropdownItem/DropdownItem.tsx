@@ -15,6 +15,7 @@ interface Props {
   onRemove?: any;
   addCheckMark?: boolean;
   exclusiveSelection?: ExclusiveSelection;
+  initialSelected?: boolean;
 }
 
 const DropdownItem: FC<Props> = ({
@@ -22,9 +23,9 @@ const DropdownItem: FC<Props> = ({
   onSelect,
   onRemove,
   addCheckMark = true,
-  exclusiveSelection,
+  initialSelected,
 }) => {
-  const [selected, setSelected] = useState<boolean>();
+  const [selected, setSelected] = useState<boolean>(initialSelected || false);
 
   const handleSelection = () => {
     const newSelected = !selected;
@@ -37,9 +38,9 @@ const DropdownItem: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (exclusiveSelection?.applied && text != exclusiveSelection.value)
-      setSelected(false);
-  }, [exclusiveSelection]);
+    if (initialSelected !== undefined) setSelected(initialSelected);
+  }, [initialSelected]);
+
   return (
     <div onClick={() => handleSelection()} className={styles.dropdownItem}>
       {capitalizeFirstLetter(text)}

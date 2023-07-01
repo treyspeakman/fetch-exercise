@@ -6,8 +6,8 @@
 .messagesContainer {
   grid-area: messageFeed;
 
-  padding: map.get(spacing.$vertical-spacing, "m")
-    map.get(spacing.$horizontal-spacing, "l");
+  padding: map.get(spacing.$vertical-spacing, "s")
+    map.get(spacing.$horizontal-spacing, "s");
   display: flex;
   flex-flow: column;
   overflow-x: hidden;
@@ -38,7 +38,7 @@
 }
 
 /* ---------------------------------------- Mobile ---------------------------------------- */
-@include responsive.breakpoint("0px", "min") {
+@include responsive.breakpoint("700px", "max") {
   .messagesContainer {
     padding-left: map.get(spacing.$horizontal-spacing, "s");
     padding-right: map.get(spacing.$horizontal-spacing, "s");
@@ -58,5 +58,3 @@
 }
 
 /* ---------------------------------------- Tablet ---------------------------------------- */
-@include responsive.breakpoint("700px", "min") {
-}

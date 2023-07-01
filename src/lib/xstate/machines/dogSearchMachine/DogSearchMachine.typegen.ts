@@ -63,6 +63,11 @@ export interface Typegen0 {
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
+    "done.invoke.logoutService": {
+      type: "done.invoke.logoutService";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
     "error.platform.getAllBreedsService": {
       type: "error.platform.getAllBreedsService";
       data: unknown;
@@ -111,6 +116,10 @@ export interface Typegen0 {
       type: "error.platform.loginService";
       data: unknown;
     };
+    "error.platform.logoutService": {
+      type: "error.platform.logoutService";
+      data: unknown;
+    };
     "xstate.init": { type: "xstate.init" };
   };
   invokeSrcNameMap: {
@@ -126,6 +135,7 @@ export interface Typegen0 {
     getPreviousPageService: "done.invoke.getPreviousPageService";
     getResultsFromChatService: "done.invoke.getResultsFromChatService";
     loginService: "done.invoke.loginService";
+    logoutService: "done.invoke.logoutService";
   };
   missingImplementations: {
     actions: never;
@@ -136,6 +146,7 @@ export interface Typegen0 {
   eventsCausingActions: {
     addFilter: "NEW_BREED_FILTER";
     clearFilters: "CLEAR_FILTERS";
+    logout: "done.invoke.logoutService";
     nextPage: "NEXT_PAGE";
     parseResult: "done.invoke.getResultsFromChatService";
     previousPage: "PREVIOUS_PAGE";
@@ -196,6 +207,7 @@ export interface Typegen0 {
     getPreviousPageService: "PREVIOUS_PAGE";
     getResultsFromChatService: "FIND_MATCH_FROM_CHAT";
     loginService: "LOGIN";
+    logoutService: "LOGOUT";
   };
   matchesStates:
     | "findingMatch"
@@ -218,6 +230,7 @@ export interface Typegen0 {
     | "init.gettingAllDogPages.failure"
     | "init.gettingAllDogPages.pending"
     | "init.gettingAllDogPages.success"
+    | "loggingOut"
     | "login"
     | "promptLogin"
     | {

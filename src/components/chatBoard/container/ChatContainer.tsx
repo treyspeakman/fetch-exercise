@@ -1,25 +1,28 @@
 import styles from "./chatContainer.module.scss";
-import { FC, useState, useEffect } from "react";
+import { FC, useContext } from "react";
 import clsx from "clsx";
-import LoadingMapEmoji from "public/icons/loading-map-emoji.svg";
-import WaitingEmoji from "public/icons/waiting-emoji.svg";
 import { ThreeDots } from "react-loading-icons";
 import Button from "@/core/components/button/Button";
-import { ChatHistory } from "@/server/routers/chatgpt";
+import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
+import { useActor } from "@xstate/react";
 
 type Props = {
-  status: "WAITING" | "THINKING" | "LOADING_MAP";
   onRestart: () => void;
   children: React.ReactNode;
 };
 
-const ChatContainer: FC<Props> = ({ status, children, onRestart }) => {
-  const getStatusMessage = (status: Props["status"]) => {
-    switch (status) {
-      case "THINKING":
-        return "is thinking";
-      case "WAITING":
-        return "is waiting";
+const ChatContainer: FC<Props> = ({ children, onRestart }) => {
+  const globalServices = useContext(GlobalStateContext);
+  const [state] = useActor(globalServices.dogSearchService);
+
+  const getStatusMessage = () => {
+    if (
+      state.matches("gettingMatchFromChat") ||
+      state.matches("gettingResultsFromChat")
+    ) {
+      return "is finding a match";
+    } else {
+      return "is waiting";
     }
   };
 
@@ -31,10 +34,10 @@ const ChatContainer: FC<Props> = ({ status, children, onRestart }) => {
           <div className={styles.titleAndStatus}>
             <h6 className={styles.chatTitle}> Doggo Discoverer </h6>
             <span className={styles.chatStatus}>
-              {getStatusMessage(status)}
+              {getStatusMessage()}
               <ThreeDots
                 stroke="#000000"
-                speed={status == "WAITING" ? 0.25 : 0.75}
+                speed={0.25}
                 fill="green"
                 className={styles.threeDots}
               />

@@ -8,13 +8,6 @@
   display: flex;
   flex-flow: column nowrap;
   row-gap: map.get(spacing.$vertical-spacing, "s");
-
-  &.userMessageContainer {
-  }
-}
-
-.recommendationString {
-  color: red;
 }
 
 .message {

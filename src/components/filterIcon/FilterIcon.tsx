@@ -28,8 +28,9 @@ const FilterIcon = () => {
       onClick={() => hovered && send({ type: "CLEAR_FILTERS" })}
       className={clsx(
         styles.filterIconContainer,
-        state.context.breedFilters.length > 0 ||
-          (state.context.ageMin !== undefined && styles.active)
+        (state.context.breedFilters.length > 0 ||
+          state.context.ageMin !== undefined) &&
+          styles.active
       )}
     >
       {(state.context.breedFilters.length > 0 ||

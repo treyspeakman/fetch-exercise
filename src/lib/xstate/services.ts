@@ -7,13 +7,18 @@ import getDogsFromIds from "../utils/api/getDogsFromIds";
 import getAllBreeds from "../utils/api/getAllBreeds";
 import { getNextPage } from "../utils/api/getPage";
 import { getPreviousPage } from "../utils/api/getPage";
-import login from "../utils/api/login";
+import { login } from "../utils/api/login";
+import { logout } from "../utils/api/logout";
 
 import { DogSearchContext } from "./machines/dogSearchMachine/DogSearchMachine";
 import { ChatHistory } from "@/server/routers/chatgpt";
 import { Dog } from "./machines/dogSearchMachine/DogSearchMachine";
 import { DogPage } from "./machines/dogSearchMachine/DogSearchMachine";
 import { Credentials } from "../utils/api/login";
+
+export const logoutService = async () => {
+  return await logout();
+};
 
 export const loginService = async (credentials: Credentials) => {
   return await login(credentials);

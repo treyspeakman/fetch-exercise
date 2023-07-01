@@ -1,5 +1,4 @@
 import { assign, createMachine } from "xstate";
-import { ChatHistory } from "@/server/routers/chatgpt";
 import * as EventTypes from "./events";
 import {
   loginService,
@@ -13,8 +12,8 @@ import {
   getMatchService,
   getPreviousPageService,
   getResultsFromChatService,
+  logoutService,
 } from "../../services";
-import login from "@/lib/utils/api/login";
 
 export interface DogPage {
   resultIds: string[];
@@ -49,6 +48,7 @@ export interface DogSearchContext {
   preferredAge: string;
   ageMin: number | undefined;
   ageMax: number | undefined;
+  loginError: boolean;
 }
 
 const dogSearchMachine = createMachine(
@@ -63,6 +63,7 @@ const dogSearchMachine = createMachine(
       /* ------------------------------ Machine Schema ------------------------------ */
       context: {} as DogSearchContext,
       events: {} as
+        | EventTypes.Logout
         | EventTypes.RemoveAgeFilter
         | EventTypes.RemoveBreedFilter
         | EventTypes.NewAgeFilter
@@ -81,6 +82,9 @@ const dogSearchMachine = createMachine(
         | EventTypes.GetFilteredDogPages
         | EventTypes.FindMatchFromChat,
       services: {} as {
+        logoutService: {
+          data: boolean;
+        };
         loginService: {
           data: boolean;
         };
@@ -120,6 +124,7 @@ const dogSearchMachine = createMachine(
       },
     },
     context: {
+      loginError: false,
       authed: false,
       dogPages: {} as DogPage,
       breedFilters: [],
@@ -151,8 +156,14 @@ const dogSearchMachine = createMachine(
           id: "loginService",
           src: "loginService",
           onDone: {
-            actions: "setAuthStatus",
+            actions: ["setAuthStatus", assign({ loginError: false })],
             target: "init",
+          },
+          onError: {
+            actions: assign({
+              loginError: true,
+            }),
+            target: "promptLogin",
           },
         },
       },
@@ -205,6 +216,7 @@ const dogSearchMachine = createMachine(
 
       idle: {
         on: {
+          LOGOUT: "loggingOut",
           REMOVE_AGE_FILTER: {
             actions: "resetAgeFilter",
             target: "gettingAllDogPages",
@@ -258,6 +270,16 @@ const dogSearchMachine = createMachine(
           SELECT_PAGE: {
             actions: "selectPage",
             target: "gettingAllDogPages",
+          },
+        },
+      },
+      loggingOut: {
+        invoke: {
+          id: "logoutService",
+          src: "logoutService",
+          onDone: {
+            actions: "logout",
+            target: "promptLogin",
           },
         },
       },
@@ -375,6 +397,9 @@ const dogSearchMachine = createMachine(
   {
     /* ------------------------------ Internal Machine Options ------------------------------ */
     actions: {
+      logout: assign({
+        authed: false,
+      }),
       resetAgeFilter: assign({
         ageMax: undefined,
         ageMin: undefined,
@@ -453,6 +478,7 @@ const dogSearchMachine = createMachine(
     },
     guards: {},
     services: {
+      logoutService: async () => await logoutService(),
       loginService: async (_, event) =>
         loginService({
           name: event.credentials.name,

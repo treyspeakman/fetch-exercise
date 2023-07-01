@@ -13,4 +13,9 @@
   padding: map.get(spacing.$vertical-spacing, "xs")
     map.get(spacing.$horizontal-spacing, "s");
   box-shadow: colors.$box-shadow;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 0 2px colors.$alabaster;
+  }
 }

@@ -39,7 +39,7 @@ const Pagination = () => {
     } else {
       setPageNumbers([1, 2, 3, 4, 5].filter((value) => value <= finalPage));
     }
-  });
+  }, [state.context.dogPages, state.context.currentDogs]);
 
   useEffect(() => {
     setFinalPage(

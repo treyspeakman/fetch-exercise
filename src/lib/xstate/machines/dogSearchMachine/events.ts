@@ -4,6 +4,9 @@ import { DogSearchContext } from "./DogSearchMachine";
 import { Credentials } from "@/lib/utils/api/login";
 import { DogAgeDescriptions } from "@/lib/utils/helpers/getDogAge";
 /* ------------------------------ Event Types ------------------------------ */
+export interface Logout {
+  type: "LOGOUT";
+}
 export interface RemoveAgeFilter {
   type: "REMOVE_AGE_FILTER";
   ageDescription: DogAgeDescriptions;

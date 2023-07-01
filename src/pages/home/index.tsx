@@ -29,6 +29,11 @@ const Home = () => {
     },
   ]);
 
+  const handleRestart = () => {
+    setMessagesQueue(dogFinderQuestions);
+    setMessages((prev) => [prev[0]]);
+  };
+
   useEffect(() => {
     if (messages.length % 2 == 0) {
       const currentQueue = [...messageQueue];
@@ -40,7 +45,6 @@ const Home = () => {
           nextMessage as ChatMessage,
         ]);
       } else {
-        console.log("sending chat");
         send({ type: "FIND_MATCH_FROM_CHAT", chat: messages });
       }
     }
@@ -56,10 +60,7 @@ const Home = () => {
       {state.context.authed ? (
         <div className={styles.dogSearchContainer}>
           <div className={styles.chatContainer}>
-            <ChatContainer
-              onRestart={() => setMessages((prev) => [prev[0]])}
-              status="WAITING"
-            >
+            <ChatContainer onRestart={handleRestart}>
               <MessagesContainer>
                 {messages.map(
                   (chatMessage: ChatCompletionRequestMessage, i) => (

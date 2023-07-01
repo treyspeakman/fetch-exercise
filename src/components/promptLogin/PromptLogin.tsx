@@ -62,7 +62,8 @@ const PromptLogin = () => {
             type="text"
             className={clsx(
               styles.input,
-              submitError && !email && styles.error
+              (submitError && !email) ||
+                (state.context.loginError && styles.error)
             )}
             placeholder="johndoe@example.com"
             id="email"

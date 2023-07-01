@@ -68,7 +68,7 @@ export const chatgptRouter = router({
           ...input,
           {
             role: "user",
-            content: `Send a message recommending one single breed out of the list provided earlier and an age 0 - 15 based on the users preferences. the message should look exactly like this "breed$age" with no other words`,
+            content: `Send a message recommending one single breed out of the list provided earlier and an age 0 - 15 based on the chat with the user. The message should look exactly like this "breed$age" with no other words. In other words, you should respond only with the breed that you recommend and the age that you recommend separated by $.`,
           },
         ],
       });
