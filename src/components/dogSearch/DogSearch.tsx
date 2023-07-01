@@ -28,7 +28,10 @@ const DogSearch = () => {
   return (
     <div className={styles.dogSearch}>
       <div className={styles.searchHeader}>
-        <SearchHeader renderIcon={() => <FilterIcon />}>
+        <SearchHeader
+          className={styles.filterDetails}
+          renderIcon={() => <FilterIcon />}
+        >
           <Dropdown title="Breed">
             {state.context.breeds.map((breed) => (
               <DropdownItem
@@ -71,6 +74,7 @@ const DogSearch = () => {
           text={state.context.match.name ? "Back to Search" : "Find a Match"}
         />
         <SearchHeader
+          className={styles.sortDetails}
           renderIcon={() => (
             <SortIcon
               onClick={() =>

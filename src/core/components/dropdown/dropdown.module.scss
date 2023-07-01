@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "@responsive" as responsive;
 @use "@colors" as colors;
 @use "@spacing" as spacing;
 @use "@fonts" as fonts;
@@ -69,4 +70,11 @@
 
 .closeIcon {
   cursor: pointer;
+}
+
+@include responsive.breakpoint("1250px", "max") {
+  .dropdownButton {
+    padding: map.get(spacing.$vertical-spacing, "xs")
+      map.get(spacing.$horizontal-spacing, "s");
+  }
 }

@@ -1,5 +1,6 @@
 @use "@spacing" as spacing;
 @use "sass:map";
+@use "@responsive" as responsive;
 
 .dogSearchContainer {
   display: grid;
@@ -16,4 +17,17 @@
   padding: map.get(spacing.$vertical-spacing, "xxl")
     map.get(spacing.$horizontal-spacing, "xxl");
   display: grid;
+}
+
+@include responsive.breakpoint("1750px", "max") {
+  .chatContainer {
+    padding: map.get(spacing.$vertical-spacing, "s")
+      map.get(spacing.$horizontal-spacing, "s");
+  }
+}
+
+@include responsive.breakpoint("1250px", "max") {
+  .chatContainer {
+    display: none;
+  }
 }

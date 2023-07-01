@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "@responsive" as responsive;
 @use "@colors" as colors;
 @use "@spacing" as spacing;
 
@@ -19,4 +20,10 @@
   display: flex;
   column-gap: map.get(spacing.$horizontal-spacing, "s");
   justify-content: space-around;
+}
+
+@include responsive.breakpoint("1250px", "max") {
+  .filterHeader {
+    column-gap: map.get(spacing.$horizontal-spacing, "xs");
+  }
 }

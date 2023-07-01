@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from "react";
 import clsx from "clsx";
 import styles from "./dropdownItem.module.scss";
 import CheckIcon from "public/icons/check.svg";
+import capitalizeFirstLetter from "@/lib/utils/helpers/capitalizeFirstLetter";
 
 interface ExclusiveSelection {
   applied: true;
@@ -41,7 +42,7 @@ const DropdownItem: FC<Props> = ({
   }, [exclusiveSelection]);
   return (
     <div onClick={() => handleSelection()} className={styles.dropdownItem}>
-      {text}
+      {capitalizeFirstLetter(text)}
 
       {addCheckMark && (
         <CheckIcon

@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import capitalizeFirstLetter from "@/lib/utils/helpers/capitalizeFirstLetter";
 import clsx from "clsx";
 import styles from "./dropdown.module.scss";
 import DropDownIcon from "public/icons/chevron-down.svg";
@@ -19,7 +20,7 @@ const Dropdown: FC<Props> = ({ title, children }) => {
         className={clsx(styles.dropdownButton, opened && styles.opened)}
         onClick={() => setOpened(true)}
       >
-        {title}
+        {capitalizeFirstLetter(title)}
         <DropDownIcon />
       </div>
       <div
