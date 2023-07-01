@@ -4,7 +4,6 @@ import clsx from "clsx";
 import styles from "./dropdown.module.scss";
 import DropDownIcon from "public/icons/chevron-down.svg";
 import CloseIcon from "public/icons/chevron-up.svg";
-import DropdownItem from "../dropdownItem/DropdownItem";
 
 interface Props {
   title: string;

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState, useContext } from "react";
 import PromptLogin from "@/components/promptLogin/PromptLogin";
-import { FC, SetStateAction } from "react";
 import DogSearch from "@/components/dogSearch/DogSearch";
 import Input from "@/core/components/input/Input";
 import {
@@ -14,9 +13,9 @@ import { ChatCompletionRequestMessage } from "openai";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import type { ChatHistory, ChatMessage } from "@/server/routers/chatgpt";
+import { dogFinderQuestions } from "@/lib/utils/chatgpt/systemMessages";
 
 import styles from "./home.module.scss";
-import { dogFinderQuestions } from "@/lib/utils/chatgpt/systemMessages";
 
 const Home = () => {
   const globalServices = useContext(GlobalStateContext);

@@ -3,7 +3,6 @@ import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
 import AppLayout from "@/components/layouts/AppLayout";
 import { GlobalStateProvider } from "@/lib/contexts/GlobalStateProvider";
-import { useState } from "react";
 
 if (typeof window !== "undefined" && process.env.NODE_ENV == "development") {
   inspect({ iframe: false });

@@ -8,8 +8,6 @@ import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import DropdownItem from "@/core/components/dropdownItem/DropdownItem";
 import SortIcon from "public/icons/sort.svg";
-
-import styles from "./dogSearch.module.scss";
 import Pagination from "@/core/components/pagination/Pagination";
 import SearchHeader from "../searchHeader/searchHeader";
 import Dropdown from "@/core/components/dropdown/Dropdown";
@@ -18,6 +16,8 @@ import Button from "@/core/components/button/Button";
 import MatchCard from "../matchCard/MatchCard";
 import { dogAgeList } from "@/lib/utils/helpers/getDogAge";
 import { Rings } from "react-loading-icons";
+
+import styles from "./dogSearch.module.scss";
 
 const sortItems: DogSearchContext["sortBy"][] = ["breed", "age", "name"];
 

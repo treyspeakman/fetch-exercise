@@ -12,7 +12,7 @@ const FilterIcon = () => {
   const [state, send] = useActor(globalServices.dogSearchService);
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const handleMouseEnter = (clearable: boolean) => {
+  const handleMouseEnter = () => {
     if (
       state.context.breedFilters.length > 0 ||
       state.context.ageMin !== undefined
@@ -23,9 +23,7 @@ const FilterIcon = () => {
 
   return (
     <div
-      onMouseEnter={() =>
-        handleMouseEnter(state.context.breedFilters.length > 0)
-      }
+      onMouseEnter={() => handleMouseEnter()}
       onMouseLeave={() => setHovered(false)}
       onClick={() => hovered && send({ type: "CLEAR_FILTERS" })}
       className={clsx(

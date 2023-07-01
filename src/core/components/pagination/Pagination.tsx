@@ -1,12 +1,17 @@
-import styles from "./pagination.module.scss";
 import clsx from "clsx";
 import PreviousIcon from "public/icons/chevron-left.svg";
 import NextIcon from "public/icons/chevron-right.svg";
 import FirstIcon from "public/icons/chevrons-left.svg";
 import LastIcon from "public/icons/chevrons-right.svg";
+import {
+  calculateCurrentPage,
+  createNumberArray,
+} from "@/lib/utils/helpers/pagination";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import { useContext, useEffect, useState } from "react";
+
+import styles from "./pagination.module.scss";
 
 const Pagination = () => {
   const globalServices = useContext(GlobalStateContext);
@@ -16,22 +21,6 @@ const Pagination = () => {
   const [finalPage, setFinalPage] = useState<number>(
     Math.ceil(state.context.dogPages.total / state.context.pageSize)
   );
-
-  const calculateCurrentPage = (
-    itemsPerPage: number,
-    cursorPosition: number
-  ) => {
-    return Math.floor(cursorPosition / itemsPerPage) + 1;
-  };
-
-  const createNumberArray = (num: number) => {
-    let numArray = [];
-    let step = -2;
-    for (let i = 0; i < 5 && num + step <= finalPage; i++) {
-      numArray.push(num + step++);
-    }
-    return numArray;
-  };
 
   const hasPreviousPage = () => !!state.context.dogPages.prev;
   const hasNextPage = () =>
@@ -46,7 +35,7 @@ const Pagination = () => {
     setCurrentPage(currentPage);
 
     if (currentPage > 3) {
-      setPageNumbers(createNumberArray(currentPage));
+      setPageNumbers(createNumberArray(currentPage, finalPage));
     } else {
       setPageNumbers([1, 2, 3, 4, 5].filter((value) => value <= finalPage));
     }

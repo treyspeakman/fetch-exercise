@@ -21,7 +21,7 @@ const MatchCard: FC<Props> = ({ messageText, matchedDog }) => {
 
   const renderMessageTyping = () => {
     if (index <= messageText.length)
-      setLiveMessage((prev) => messageText.slice(0, index));
+      setLiveMessage(messageText.slice(0, index));
   };
 
   useEffect(() => {

@@ -1,7 +1,6 @@
-import login from "@/lib/utils/api/login";
 import styles from "./promptLogin.module.scss";
 import Button from "@/core/components/button/Button";
-import { FC, FormEvent, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useContext } from "react";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";

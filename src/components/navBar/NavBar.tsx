@@ -1,6 +1,6 @@
 import TextButton from "@/core/components/textButton";
 import JakeIcon from "public/icons/jake-white.svg";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { useActor } from "@xstate/react";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 
