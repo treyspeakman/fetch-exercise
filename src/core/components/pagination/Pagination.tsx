@@ -77,8 +77,9 @@ const Pagination = () => {
         )}
       />
       <div className={styles.pageNumberList}>
-        {pageNumbers.map((pageNumber) => (
+        {pageNumbers.map((pageNumber, i) => (
           <span
+            key={i}
             onClick={() => send({ type: "SELECT_PAGE", pageNumber })}
             className={clsx(
               styles.pageNumberContainer,

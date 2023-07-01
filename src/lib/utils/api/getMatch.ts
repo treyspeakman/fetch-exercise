@@ -1,5 +1,5 @@
-import { DogSearchContext } from "@/lib/xstate/machines/DogSearchMachine";
-import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
+import { DogSearchContext } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { Dog } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
 import getDogsFromIds from "./getDogsFromIds";
 const getMatch = async (
   ids: DogSearchContext["searchedDogIdsList"]

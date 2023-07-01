@@ -33,8 +33,9 @@ const DogSearch = () => {
           renderIcon={() => <FilterIcon />}
         >
           <Dropdown title="Breed">
-            {state.context.breeds.map((breed) => (
+            {state.context.breeds.map((breed, i) => (
               <DropdownItem
+                key={i}
                 text={breed}
                 onSelect={() => send({ type: "NEW_BREED_FILTER", breed })}
                 onRemove={() => send({ type: "REMOVE_BREED_FILTER", breed })}
@@ -42,8 +43,9 @@ const DogSearch = () => {
             ))}
           </Dropdown>
           <Dropdown title="Age">
-            {dogAgeList.map((ageDescription) => (
+            {dogAgeList.map((ageDescription, i) => (
               <DropdownItem
+                key={i}
                 text={ageDescription}
                 exclusiveSelection={{
                   applied: true,
@@ -120,8 +122,9 @@ const DogSearch = () => {
       ) : (
         <>
           <div className={styles.cardGrid}>
-            {state?.context.currentDogs.map((dog) => (
+            {state?.context.currentDogs.map((dog, i) => (
               <DogCard
+                key={`${dog.name}-${i}`}
                 age={dog.age}
                 breed={dog.breed}
                 name={dog.name}
