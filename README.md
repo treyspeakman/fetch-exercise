@@ -1,8 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## To Run Locally
 
-## Getting Started
-
-First, run the development server:
+```bash
+npm i
+```
 
 ```bash
 npm run dev
@@ -14,25 +14,32 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Notes
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### State Management
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- I have chosen to use XState as my state management solution instead of Redux,
+  React Context, or React Hooks. When running the application locally, XState
+  provides an inspection tab that allows you to view the current state of the
+  application, as well as the events and transitions, similar to Redux devtools. Although I am relatively new
+  to using XState, I have found it to be a powerful tool and decided to give it a
+  try. In an ideal scenario, I would break down the primary state machine into
+  smaller state machines that correspond to different parts of the application.
+  However, I encountered some challenges in doing so due to the ongoing
+  development of TypeScript support in XState.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### File Structure
 
-## Learn More
+- I used [this](https://giancarlobuomprisco.com/next/a-scalable-nextjs-project-structure) file structure for the Next.js application.
 
-To learn more about Next.js, take a look at the following resources:
+  - src/core - Reusable components
+  - src/lib - Utilities and state management
+    - You can find api endpoints at src/lib/xstate/services
+  - src/component - Components that are tightly coupled to application logic
+  - src/pages - Next.js pages
+  - src/server - I used [TRPC](https://trpc.io/docs/getting-started) for TypeScript remote procedure calls with my Next.js serverless functions
+    - I only used this for the OpenAI integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### API Keys
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Without the .env.local file with the OpenAI API key, the chat and dog intro features will not work locally. This file is not included in the repo.

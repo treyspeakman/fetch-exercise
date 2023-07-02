@@ -12,7 +12,7 @@ import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
 import { useActor } from "@xstate/react";
 import DropdownItem from "@/core/components/dropdownItem/DropdownItem";
 import SortIcon from "public/icons/sort.svg";
-import Pagination from "@/core/components/pagination/Pagination";
+import Pagination from "../pagination/Pagination";
 import SearchHeader from "../searchHeader/searchHeader";
 import Dropdown from "@/core/components/dropdown/Dropdown";
 import FilterIcon from "../filterIcon/FilterIcon";

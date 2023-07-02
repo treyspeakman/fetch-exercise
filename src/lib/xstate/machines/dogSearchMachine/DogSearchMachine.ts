@@ -129,7 +129,7 @@ const dogSearchMachine = createMachine(
       dogPages: {} as DogPage,
       breedFilters: [],
       currentDogs: [],
-      pageSize: 25,
+      pageSize: 40,
       cursor: 0,
       breeds: [],
       sortBy: "breed",
@@ -470,7 +470,8 @@ const dogSearchMachine = createMachine(
         dogPages: (_, event) => event.data,
       }),
       selectPage: assign({
-        cursor: (context, event) => context.pageSize * event.pageNumber - 25,
+        cursor: (context, event) =>
+          context.pageSize * event.pageNumber - context.pageSize,
       }),
       setBreeds: assign({
         breeds: (_, event) => event.data,
