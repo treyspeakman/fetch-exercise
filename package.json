@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "node_modules/.bin/xstate typegen \"./src/**/*.ts?(x)\"",
+    "postinstall": "xstate typegen \"./src/**/*.ts?(x)\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
