@@ -1,4 +1,4 @@
-import { DogPage } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { DogPage } from "@/lib/xstate/machines/DogSearchMachine";
 
 export const getNextPage = async (
   dogPage: DogPage,

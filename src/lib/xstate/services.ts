@@ -10,10 +10,10 @@ import { getPreviousPage } from "../utils/api/getPage";
 import { login } from "../utils/api/login";
 import { logout } from "../utils/api/logout";
 
-import { DogSearchContext } from "./machines/dogSearchMachine/DogSearchMachine";
+import { DogSearchContext } from "./machines/DogSearchMachine";
 import { ChatHistory } from "@/server/routers/chatgpt";
-import { Dog } from "./machines/dogSearchMachine/DogSearchMachine";
-import { DogPage } from "./machines/dogSearchMachine/DogSearchMachine";
+import { Dog } from "./machines/DogSearchMachine";
+import { DogPage } from "./machines/DogSearchMachine";
 import { Credentials } from "../utils/api/login";
 
 export const logoutService = async () => {

@@ -16,6 +16,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Notes
 
+### Website URL
+
+- https://prod-run-6809377-kbhlrcfona-uc.a.run.app
+  - The site is hosted on GCP's Cloud Run using Cloud Build, Docker, Git, and other GCP tools for CI/CD
+
 ### State Management
 
 - I have chosen to use XState as my state management solution instead of Redux,

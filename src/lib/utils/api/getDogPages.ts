@@ -1,5 +1,5 @@
-import { DogPage } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
-import { DogSearchContext } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { DogPage } from "@/lib/xstate/machines/DogSearchMachine";
+import { DogSearchContext } from "@/lib/xstate/machines/DogSearchMachine";
 
 const getDogPages = async (
   from: number,

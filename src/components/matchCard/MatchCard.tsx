@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import Image from "next/image";
-import { Dog } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
 import styles from "./matchCard.module.scss";
 import { getDogAge } from "@/lib/utils/helpers/getDogAge";
 import { useContext } from "react";

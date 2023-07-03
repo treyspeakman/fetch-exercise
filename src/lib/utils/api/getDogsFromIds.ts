@@ -1,4 +1,4 @@
-import { Dog } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { Dog } from "@/lib/xstate/machines/DogSearchMachine";
 
 const getDogsFromIds = async (ids: string[]): Promise<Dog[]> => {
   const response = await fetch(

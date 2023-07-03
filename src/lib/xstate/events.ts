@@ -1,6 +1,6 @@
 import { ChatHistory } from "@/server/routers/chatgpt";
-import { Dog } from "./DogSearchMachine";
-import { DogSearchContext } from "./DogSearchMachine";
+import { Dog } from "./machines/DogSearchMachine";
+import { DogSearchContext } from "./machines/DogSearchMachine";
 import { Credentials } from "@/lib/utils/api/login";
 import { DogAgeDescriptions } from "@/lib/utils/helpers/getDogAge";
 /* ------------------------------ Event Types ------------------------------ */

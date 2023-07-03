@@ -1,5 +1,5 @@
 import { assign, createMachine } from "xstate";
-import * as EventTypes from "./events";
+import * as EventTypes from "../events";
 import {
   loginService,
   getNextPageService,
@@ -13,7 +13,7 @@ import {
   getPreviousPageService,
   getResultsFromChatService,
   logoutService,
-} from "../../services";
+} from "../services";
 
 export interface DogPage {
   resultIds: string[];
@@ -218,15 +218,15 @@ const dogSearchMachine = createMachine(
         on: {
           LOGOUT: "loggingOut",
           REMOVE_AGE_FILTER: {
-            actions: "resetAgeFilter",
+            actions: ["resetAgeFilter", "resetCursor"],
             target: "gettingAllDogPages",
           },
           REMOVE_BREED_FILTER: {
-            actions: "removeBreedFilter",
+            actions: ["removeBreedFilter", "resetCursor"],
             target: "gettingAllDogPages",
           },
           NEW_AGE_FILTER: {
-            actions: "setNewAgeRange",
+            actions: ["setNewAgeRange", "resetCursor"],
             target: "gettingAllDogPages",
           },
           FIND_MATCH_FROM_CHAT: {
@@ -244,19 +244,19 @@ const dogSearchMachine = createMachine(
             target: "gettingAllSearchedDogs",
           },
           NEW_SORT_DIRECTION: {
-            actions: "setNewSortDirection",
+            actions: ["setNewSortDirection", "resetCursor"],
             target: "init.gettingAllDogPages",
           },
           NEW_SORT_FIELD: {
-            actions: "setNewSortField",
+            actions: ["setNewSortField", "resetCursor"],
             target: "init.gettingAllDogPages",
           },
           CLEAR_FILTERS: {
-            actions: "clearFilters",
+            actions: ["clearFilters", "resetCursor"],
             target: "init.gettingAllDogPages",
           },
           NEW_BREED_FILTER: {
-            actions: "addFilter",
+            actions: ["addFilter", "resetCursor"],
             target: "gettingFilteredDogPages",
           },
           NEXT_PAGE: {
@@ -339,7 +339,7 @@ const dogSearchMachine = createMachine(
           id: "getFilteredDogPagesService",
           src: "getFilteredDogPagesService",
           onDone: {
-            actions: "setNewPage",
+            actions: ["setNewPage"],
             target: "gettingCurrentDogs",
           },
         },
@@ -468,6 +468,9 @@ const dogSearchMachine = createMachine(
       }),
       setNewPage: assign({
         dogPages: (_, event) => event.data,
+      }),
+      resetCursor: assign({
+        cursor: 0,
       }),
       selectPage: assign({
         cursor: (context, event) =>

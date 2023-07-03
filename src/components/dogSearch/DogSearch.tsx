@@ -5,7 +5,7 @@ import {
   getDogAge,
   getAgeRange,
 } from "@/lib/utils/helpers/getDogAge";
-import { DogSearchContext } from "@/lib/xstate/machines/dogSearchMachine/DogSearchMachine";
+import { DogSearchContext } from "@/lib/xstate/machines/DogSearchMachine";
 import clsx from "clsx";
 import DogCard from "../dogCard/DogCard";
 import { GlobalStateContext } from "@/lib/contexts/GlobalStateProvider";
