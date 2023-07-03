@@ -6,14 +6,14 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
-RUN npm run postinstall
 
 FROM base as builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules  
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
+RUN npm run postinstall
 RUN npm run build
 
 FROM base AS runner
