@@ -12,7 +12,9 @@ type Props = {
 };
 
 export const GlobalStateProvider: FC<Props> = ({ children }) => {
-  const dogSearchService = useInterpret(dogSearchMachine, { devTools: true });
+  const dogSearchService = useInterpret(dogSearchMachine, {
+    devTools: process.env.NODE_ENV == "development" ? true : false,
+  });
 
   return (
     <GlobalStateContext.Provider value={{ dogSearchService }}>
